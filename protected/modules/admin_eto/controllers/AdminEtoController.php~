@@ -1,0 +1,641 @@
+<?php
+error_reporting(1);
+class AdminEtoController extends Controller
+{
+	private $path;
+	public $loginPath;
+	public $statusDesc = array();
+	public $userStatusDesc = array();
+	public $approvalEditEMP = array();
+	public $status_type = array();
+	public $status_disp = array();
+	public $model = '';
+	public $etoModel = '';
+	public $glModel = '';
+	public $approvPermit = array();
+	public $qtyList = array();
+	public $qtyListOther = array();
+	public $leapMisEmp = array();
+	public $valday = array();
+	public $valmonthval = array();
+	public $valyearval = array();
+	public $cntryArr = array();
+	public $leapdashboardModel = array();
+	
+	public function init(){
+		$this->status_type = array('1' => "U", '2' => "D", '3' => "E", '4' => "P", '5' => "R", '6' => "T",'7' => "A");
+		$this->status_disp = array('U' => "Modified", 'D' => "Deleted", 'E' => "Expired", 'P' => "Reposted", 'R' => "Renewed", 'T' => "Push To Top", 'N' => "New Posted", 'A' => "All");
+		$this->path = $_SERVER['ADMIN_URL'];
+	 	$this->loginPath = $_SERVER['ADMIN_URL'];
+	 	$this->statusDesc = array(
+					'W'=>'Waiting',
+					'A'=>'Approved'	
+		);
+	 	$this->userStatusDesc = array(
+					'W'=>'Waiting',
+					'A'=>'Approved',
+					'D'=>'Disabled',
+					'M'=>'Error Disabled'
+		);	
+		$this->model =  new AdminEtoModelForm();
+		$this->etoModel =  new AdminEtoForm();
+		$this->leapdashboardModel =  new LeapDashboardModel();
+		$this->glModel =  new GlobalmodelForm();
+		$this->approvPermit = array(6226,23579,30526,23015,36545,32888,26023,35740,22288,19636,29469,30582,29610,28414,29135,33857,30927,30928,31898,30926,31453,31896,31897,32236,29611,29131,27895,29612,32002,29130,27842,27874,33858,31895,29967,29608,29609,29613,34931,34073,34891,35443,36833,34843,36199,35518,35686,30955,31945,35733,35735,32137,28222,35013,36036,36351,36703,31942,35734,38205,38206,38207,38208);
+		$this->qtyList = array("Kilogram","Metric Tons","Nos","Pieces","Tons");
+	 	$this->qtyListOther = array("20' Container","40' Container","Bags","Barrel","Bottles","Boxes","Bushel","Cartons","Dozens","Foot","Gallon","Grams","Hectare","Kilogram","Kilometer","Litres","Long Ton","Meter","Metric Tons","Nos","Ounce","Packets","Packs","Pairs","Pieces","Pound","Reams","Rolls","Sets","Sheets","Short Ton","Square Feet","Square Meters","Tons","Units","Others");
+	 	$this->leapMisEmp = array(35740,22288,32236,3664);
+	 	$this->valday = array_combine(range(01,31),range(01,31));
+		$this->valmonthval = array("01"=>"January","02"=>"February","03"=>"March","04"=>"April","05"=>"May","06"=>"June",
+"07"=>"July","08"=>"August","09"=>"September","10"=>"October","11"=>"November","12"=>"December");
+		$this->valyearval = array_combine(range(date("Y",strtotime("-5 year")),date("Y",strtotime("+5 year"))),range(date("Y",strtotime("-5 year")),date("Y",strtotime("+5 year"))));
+		$this->cntryArr = array("All","India","Foreign");
+	}
+	
+	public function actionIndex() {
+ 		$this->render('/admineto/index');
+	}
+	
+	public function actionLeftIndex() {
+		$q = $_REQUEST;		
+			$valid= 0;
+			$adm_lvl_desc= array();
+			$glmodel = new GlobalmodelForm();
+			$empData = $this->getEmpIdLVLCode($q);
+			$empId = $empData['empId'];
+			$data = $empData['data'];
+         
+         if($empId) {
+         	$valid = $this->model->isValid($q,$empId,$glmodel);
+         }         
+         if(!isset($data['lvl_code'])) {
+          	$lvl_code = 1000;
+  			}	else {
+				$lvl_code = $data['lvl_code'];  			
+  			}	
+         $admLvl = $this->model->getAdmAllLevels($glmodel);        
+         foreach($admLvl as $k => $row) {
+      		$adm_lvl_desc[$row] = $k;
+  			}		
+		$this->render("/admineto/leftindex",array(
+		"valid" => $valid,
+		"emp_id" => $empId,
+		"loginPath" => $_SERVER['ADMIN_URL'],
+		"lvl_code" => $lvl_code	,
+		"adm_lvl" => $admLvl,
+		"adm_lvl_desc" => $adm_lvl_desc
+		));	
+	}	
+	
+	public function actionRightIndex() {
+		$this->render("/admineto/rightindex");	
+	}
+	
+	public function actionTopIndex() {
+		$moduleId = Yii::app()->request->getParam('mid');
+		$q = $_REQUEST;
+		$glmodel = new GlobalmodelForm();
+		$dbh = $glmodel->connect_db();		
+		$model =  new AdminEtoModelForm();
+		$empData = $this->getEmpIdLVLCode($q);
+		$empId = $empData['empId'];
+		$data = $empData['data'];
+		$loginData = $glmodel->checklogin($dbh,$moduleId,$empId);
+		$this->render('/admineto/topindex', array('data' => $data,'empId' => $empId,'moduleId'=> $moduleId));
+	}
+	
+	public function actionRightFrame() {
+		$openPage = Yii::app()->request->getParam('openpg');
+		$returnArr = array();
+		$q = $_REQUEST;
+		$valid= 0;
+		$empData = $this->getEmpIdLVLCode($q);
+		$empId  = $empData['empId'];
+		$data  = $empData['data'];
+		if(!isset($data['lvl_code'])) {
+          	$lvl_code = 1000;
+  			}	else {
+				$lvl_code = $data['lvl_code'];  			
+  			}
+		$glmodel = new GlobalmodelForm();
+		$valid = $this->model->isValid($q,$empId,$glmodel);
+		$admLvl = $this->model->getAdmAllLevels($glmodel);
+		if(!isset($data['lvl_code'])) {
+          	$lvl_code = 1000;
+  			}	else {
+				$lvl_code = $data['lvl_code'];  			
+  			}
+  			$returnArr = array(
+  				"valid"=>$valid,
+  				"openPage" => $openPage,
+  				"loginPath" => $_SERVER['ADMIN_URL'],
+				"path" => $_SERVER['ADMIN_URL']."/admin_eto"
+  			);
+		$this->render('/admineto/rightframe',$returnArr);	
+	}
+	
+	public function getEmpIdLVLCode($q) {
+		$data = array();
+		//$empId = Yii::app()->session['empid'];
+		$empId = Yii::app()->request->cookies['adminiil']->value;	
+		if($empId){
+			$glmodel = new GlobalmodelForm();
+			$data = $this->model->getLVLCode($q,$empId,$glmodel);
+		}
+		return array("data"=>$data,"empId"=>$empId);
+	}
+	
+	public function actionLeapFlagged(){
+		$valid = 0;		
+		$flaggedLeads = array();		
+		$q = $_REQUEST;
+		$empData = $this->getEmpIdLVLCode($q);
+		$empId = $empData['empId'];
+		$data = $empData['data'];
+		$glmodel = new GlobalmodelForm();
+		$adminEtomodel = new AdminEtoModelForm();
+		
+		
+		if($empId) {
+			$valid = $adminEtomodel->isValid($q,$empId,$glmodel);
+		}
+		$param['action'] = Yii::app()->request->getParam('action');
+		
+		if($param['action'] == "flaggedmcatna"){
+			$flaggedLeads = $this->etoModel->getFlaggedLeads($glmodel);
+		}
+		$result = array(
+			"valid" => $valid,
+			"flaggedLeads" => $flaggedLeads,
+			"path" => $_SERVER['ADMIN_URL'],
+			"loginPath" => $_SERVER['ADMIN_URL'],	
+		);
+		$this->render("/admineto/leapflagged",$result);	
+	}
+	
+	public function actionEditFlaggedLeads() {	
+	$resultData = array();
+	$arr_map_ref = array();
+	
+		$this->approvalEditEMP = array(22288,19636,29469,30582,29610,28414,29135,33857,30927,30928,31898,30926,31453,31896,31897,32236,29611,29131,27895,29612,32002,29130,27842,27874,33858,31895,29967,29608,29609,29613,29611,34931,34073,34891,35443,36833,34843,36199,35518,35686,30955,31945,35733,35735,32137,28222,35013,36036,36351,36703,31942); 	
+		$request = Yii::app()->request;
+		$valid = 0;
+		$q = $_REQUEST;
+		$empData = $this->getEmpIdLVLCode($q);
+		$empId = $empData['empId'];
+		$data = $empData['data'];
+		if(!isset($data['lvl_code']) || $data['lvl_code'] == 1000) {
+          	$lvl_code = 100;
+  			}	else {
+				$lvl_code = $data['lvl_code'];  			
+  		}
+		$path = $_SERVER['ADMIN_URL'];
+		$glmodel = new GlobalmodelForm();
+		if($empId) {
+			$valid = $this->model->isValid($q,$empId,$glmodel);
+		}
+		$adm_lvl = $this->model->getAdmAllLevels($glmodel);
+		if($valid != 0){
+			$param['action'] = $request->getParam('action');
+			$param['offer'] = $request->getParam('offer');
+				
+			//if($param['action'] == "edit" && !empty($param['offer'])){
+			if(!empty($param['offer'])){
+				
+				$resultData = $this->etoModel->editOffer($request,$empId,$path,$this->statusDesc,$this->userStatusDesc,'','','',$glmodel);
+				
+				$arr_map_ref = $this->etoModel->getCatMcatDetail($param['offer'],$glmodel);
+				
+			}
+		}
+		$returnArr = array(
+		"adm_lvl"=>$adm_lvl,
+		"lvl_code"=> $lvl_code,
+		"valid"=>$valid,
+		'result'=> $resultData,
+		'arr_map_ref' => $arr_map_ref,
+		'offerID' => $param['offer'],
+		'approvalEditEMP' => $this->approvalEditEMP,
+		'emp_id' => $empId,
+		'statusDesc' => $this->statusDesc,
+		'userStatusDesc' => $this->userStatusDesc,
+		'qtyListOther' => $this->qtyListOther,
+		'qtyList' => $this->qtyList,
+		);
+		
+		$this->render("/admineto/editflaggedleads",$returnArr);
+	}
+	
+	public function actionSetFlag(){
+		
+		$q = $_REQUEST;
+		$updateFlag = '';
+		$empData = $this->getEmpIdLVLCode($q);
+		$empId = $empData['empId'];
+		if(!isset($data['lvl_code']) || $data['lvl_code'] == 1000) {
+          	$lvl_code = 100;
+  		} else {
+				$lvl_code = $data['lvl_code'];  			
+  		}
+  		$glmodel = new GlobalmodelForm();
+  		$admLvl = $this->model->getAdmAllLevels($glmodel);
+  		$adminEtoModel = new AdminEtoForm();
+  		if ($lvl_code <= $admLvl['General']) 
+		{
+			$updateFlag = $adminEtoModel->saveOffer($empId,$glmodel);
+			if($updateFlag["status"] == "SUCCESS"){
+				echo $updateFlag["msg"];
+				$this->redirect(Yii::app()->request->urlReferrer);
+			} else {
+				return $updateFlag["msg"];	
+			}
+		}
+		
+	}
+	
+	public function actionSearchManualMcat(){
+		
+		$q = $_REQUEST;
+		$updateFlag = '';
+		$empData = $this->getEmpIdLVLCode($q);
+		$empId = $empData['empId'];
+		if(!isset($data['lvl_code']) || $data['lvl_code'] == 1000) {
+          	$lvl_code = 100;
+  		} else {
+				$lvl_code = $data['lvl_code'];  			
+  		}
+		$glmodel = new GlobalmodelForm();
+		$manualMcatResult = $this->etoModel->manualMcat($empId,$glmodel);	
+		$this->render("/admineto/searchmanualmcat",array("manualMcatResult"=>$manualMcatResult));
+		
+	}
+	
+	public function actionGetCatOffers(){
+		
+		$glmodel = new GlobalmodelForm();
+		$manualMcatResult = $this->etoModel->getManualMcatList($glmodel);
+		
+	}
+	
+	public function actionShowOffersDelReason(){
+		$request = Yii::app()->request;		
+		$button = $request->getParam("button",'');
+		$glmodel = new GlobalmodelForm();
+		$deleteResonResult = $this->etoModel->showOfferDelReasons($glmodel,$request);
+		$result = $deleteResonResult['result'];
+		$fromAnchor = $deleteResonResult['fromAnchor'];
+		$redirectURL = $deleteResonResult['redirectURL'];
+		$this->render("/admineto/showofferdelreasons",array("deleteResonResult"=>$result,'button' => $button,"fromAnchor" => $fromAnchor,"redirectURL" => $redirectURL));
+	}
+	
+	public function actionDeleteSilent(){
+		$q = $_REQUEST;			
+		$request = Yii::app()->request;
+		$referalUrl = $request->getParam('referalUrl','');
+		$model = new AdminEtoForm();
+		$glModel = new GlobalmodelForm();
+		$empData = $this->getEmpIdLVLCode($q);
+		$empId = $empData['empId'];
+		if(!isset($data['lvl_code']) || $data['lvl_code'] == 1000) {
+          	$lvl_code = 100;
+  		} else {
+				$lvl_code = $data['lvl_code'];  			
+  		}
+  		$adm_lvl = $this->model->getAdmAllLevels($glModel);
+  		if ($lvl_code <= $adm_lvl['General']) 
+		{
+			$deleted = $model->delRec($glModel,$request,$empId,'');
+		}
+		if(!empty($referalUrl)){
+					$this->redirect($referalUrl);
+		} else{
+			$this->redirect(Yii::app()->request->urlReferrer);
+		}
+		
+	}
+	
+	public function actionSearchOffer(){
+		die;	
+	}
+	
+	public function actionEtoHistory(){
+		$returnRe = array();
+		$request = Yii::app()->request;
+		$params = $q = $_REQUEST;
+		$valid= 0;
+		$emp_id=0;
+		$glModel = new GlobalmodelForm();
+		$model = new AdminEtoForm();
+
+	
+		$empData = $this->getEmpIdLVLCode($q);
+		$empId = $empData['empId'];
+		if(!empty($empId)) {
+			$valid = $this->model->isValid($q,$empId,$glModel);
+		}
+		if($params['act'] == "generate"){
+			$returnResult = $model->histUsrResult($request,$glModel,$this->status_type,$this->status_disp);
+		} else if($params['act'] == "ofrHist"){
+			$returnResult = $model->histOfrAllDet($request,$glModel,$this->status_type,$this->status_disp);
+			$this->render("/admineto/offerhistory",array("valid" => $valid,"returnResult"=>$returnResult,"param"=>$params,"status_type"=>$this->status_type,"status_disp"=>$this->status_disp));
+		} else if($params['act'] == "fenqHist"){
+			$returnResult = $model->histFENQOfrAllDet($glModel);
+			$this->render("/admineto/fenqhistory",array("valid" => $valid,"returnResult"=>$returnResult,"param"=>$params,"status_type"=>$this->status_type,"status_disp"=>$this->status_disp));
+		} else if($params['act'] == "mapHist"){
+			$returnResult = $model->histOfrMapDet($request,$glModel,$this->status_type,$this->status_disp);
+			$this->render("/admineto/mappinghistory",array("valid" => $valid,"returnResult"=>$returnResult,"param"=>$params,"status_type"=>$this->status_type,"status_disp"=>$this->status_disp));
+		} else{
+			$returnResult = $model->histUsrForm($request,$glModel,$this->status_type,$this->status_disp); 		
+		}
+		
+	}
+	
+	public function actionBuyLeads() {
+		$params = $_REQUEST;		
+		$glModel = new GlobalmodelForm();
+		$model = new AdminEtoForm();
+		$request = Yii::app()->request;
+		$status = $request->getParam('status','');
+		$empData = $this->getEmpIdLVLCode($params);
+		$empId = $empData['empId'];
+		$start = isset($params['start'])?$params['start']:'';
+		if(!isset($empDatata['lvl_code']) || $empData['lvl_code'] == 1000) {
+          	$lvl_code = 100;
+  		} else {
+				$lvl_code = $data['lvl_code'];  			
+  		}
+  		$adm_lvl = $this->model->getAdmAllLevels($glModel);
+  		
+		if((isset($params['do']) && $params['do'] == 'livelead') || isset($params['go'])){
+			$result = $model->showSearchResult($request,$empId,$glModel,$this->statusDesc,$this->userStatusDesc,$start,$lvl_code,$adm_lvl,$status);
+		}
+		$this->render('/admineto/buyleads',array(
+			'result'=>$result,
+			'userStatusDesc'=>$this->userStatusDesc,
+			'statusDesc' => $this->statusDesc,
+			'lvl_code' => $lvl_code,
+			'adm_lvl' => $adm_lvl
+			)
+		);
+	}
+	public function actionShowDelReason(){
+		$request = Yii::app()->request;	
+		
+		$fromAnchor = $request->getParam('fromanchor',0);
+		$redirectURL = $request->getParam('url','');
+			
+		$button = $request->getParam("button",'');
+		$glmodel = new GlobalmodelForm();
+		$deleteResonResult = $this->etoModel->showOfferDelReasons($glmodel,$request);		
+		$result = $deleteResonResult['result'];
+		$fromAnchor = $deleteResonResult['fromAnchor'];
+		$redirectURL = $deleteResonResult['redirectURL'];
+		$this->render("/admineto/offerdelreason",array("deleteResonResult"=>$result,'redirectURL' => $redirectURL,'fromAnchor'=> $fromAnchor,'button' => $button,'fromAnchor'=>$fromAnchor,'redirectURL'=>$redirectURL));
+	}
+	
+	public function actiondelmulrecord(){
+		$request = Yii::app()->request;
+		$q = $_REQUEST;		
+		$start = $request->getParam('start','');
+		$delmuloffers = $request->getParam('delmulOfrs','');
+		$empData = $this->getEmpIdLVLCode($q);
+		$empId = $empData['empId'];
+		if(!isset($empData['lvl_code']) || $empData['lvl_code'] == 1000) {
+          	$lvl_code = 100;
+  		} else {
+				$lvl_code = $empData['lvl_code'];  			
+  		}
+  		$adm_lvl = $this->model->getAdmAllLevels($this->glModel);
+		if(!empty($delmuloffers)){
+			$delResult = $this->etoModel->delMulRecord($this->glModel,$request,$empId);
+		}
+		$status = 'W';
+		$result = $this->etoModel->showSearchResult($request,$empId,$this->glModel,$this->statusDesc,$this->userStatusDesc,$start,$lvl_code,$adm_lvl,$status);
+		$this->render('/admineto/buyleads',array(
+			'result'=>$result,
+			'userStatusDesc'=>$this->userStatusDesc,
+			'statusDesc' => $this->statusDesc,
+			'lvl_code' => $lvl_code,
+			'adm_lvl' => $adm_lvl
+			)
+		);	
+	}
+	
+	public function actionSaveGlusrDetails() {
+		$request = Yii::app()->request;
+		$q = $_REQUEST;
+		$empData = $this->getEmpIdLVLCode($q);
+		$empId = $empData['empId'];
+		$updateResult = $this->etoModel->saveGlUsrDetails($request,$this->glModel,$empId);
+		if($updateResult == "FAIL"){
+			echo "Glusr Updation Failed.";	
+		}
+		$this->redirect(Yii::app()->request->urlReferrer);		
+	}
+	
+	public function actionViewEditEnrichment(){
+		
+		$request = Yii::app()->request;
+		
+		$param['offerId'] = $request->getParam('offer',0);
+		$param['field'] = $request->getParam('field','');
+		$param['allowPrem'] = 'N';
+		
+		$q = $_REQUEST;
+		
+		$valid= 0;
+		$empData = $this->getEmpIdLVLCode($q);
+		$empId = $empData['empId'];
+  		if(!empty($empId)) {
+			$valid = $this->model->isValid($q,$empId,$this->glModel);
+		}
+		if(!isset($empData['lvl_code']) || $empData['lvl_code'] == 1000) {
+          	$lvl_code = 100;
+  		} else {
+				$lvl_code = $empData['lvl_code'];  			
+  		}
+  		$adm_lvl = $this->model->getAdmAllLevels($this->glModel);
+		
+		if(in_array($empId, $this->approvPermit))
+		{
+			$param['allowPrem'] = 'Y';
+		}
+		$recvaluerange = $this->model->getApproxOrderValue($this->glModel);
+		$recvaluerangeIN = $recvaluerange['recvaluerangeIN'];
+		$recvaluerangeFR = $recvaluerange['recvaluerangeFR'];
+		$masterValues = $this->model->getMasterValues($this->glModel);
+		
+      $result = $this->etoModel->showPrevCallData($request,$param,$this->glModel);
+      
+  		$this->render("/admineto/vieweditenrichment",array(
+  			"valid" => $valid,
+  			"result" => $result,
+  			"recvaluerangeFR" => $recvaluerangeFR,
+  			"recvaluerangeIN" => $recvaluerangeIN,
+  			"masterValues" => $masterValues,
+  			"allowPrem" => $param['allowPrem'],
+  			"adm_lvl" => $adm_lvl,
+  			"lvl_code" => $lvl_code,
+  			)
+  		);
+	}	
+	
+	public function actionUpdateCallData(){			
+			$request = Yii::app()->request;
+			$fieldsArr= array();	
+			$re = $this->etoModel->updateCallData($request,$this->glModel);
+			$this->redirect(Yii::app()->request->urlReferrer);
+	}
+	
+	public function actionmanualgrouplist()
+	{
+		$glmodel = new GlobalmodelForm();
+		$manualMcatResult = $this->etoModel->getManualGroupList($glmodel);		
+	}
+	
+	public function actionComplaint() {
+		$glmodel = new GlobalmodelForm();
+		$complaintResult = $this->etoModel->showAllComplaint($glmodel);
+		$this->render("/admineto/complaint",array('complaintResult' => $complaintResult));
+	}
+	
+	public function actionBlDeleteReason() {	
+			$referalUrl = Yii::app()->request->urlReferrer;
+			$delReasons = array();
+			$request = Yii::app()->request;
+			$q = $_REQUEST;
+			$valid= 0;
+			$empData = $this->getEmpIdLVLCode($q);
+			$empId = $empData['empId'];
+  			if(!empty($empId)) {
+					$valid = $this->model->isValid($q,$empId,$this->glModel);
+			}
+			if($valid != 0) {
+					$delReasons = $this->etoModel->showOfferDelReasons($this->glModel,$request);
+			}		
+			$this->render("/admineto/bldeletereasons",array('referalUrl' => $referalUrl, 'valid' => $valid,'delResult' => $delReasons,'loginPath' => $this->loginPath));
+	}
+	
+	public function actionVendorLeapMis(){
+	    $succMsg = ''; $errMsg = ''; $showForm = 1;
+	    $request = Yii::app()->request;
+	    $empData = $this->getEmpIdLVLCode($request);
+	    $empId = $empData['empId'];
+	    if(!in_array($empId,$this->leapMisEmp)){
+		$errMsg = "Permission Denied";
+		$showForm = 0;
+	    } else{
+		if(Yii::app()->request->isPostRequest){
+			$action = $request->getParam("action",'');
+			if($action == "getempdetail"){
+				$empDetArr = $this->model->getEmpDetail($request,$this->glModel);
+				$msg = "";
+				if(empty($empDetArr)){
+					$msg = "Employee Not Found";
+				}
+					$empDet['emp_name'] = isset($empDetArr['GL_EMP_NAME'])?$empDetArr['GL_EMP_NAME']:'';
+					$empDet['emp_email'] = isset($empDetArr['GL_EMP_EMAIL'])?$empDetArr['GL_EMP_EMAIL']:'';
+					$empDet['vendor_name'] = isset($empDetArr['ETO_LEAP_VENDOR_NAME'])?$empDetArr['ETO_LEAP_VENDOR_NAME']:'';
+					$empDet['emp_level'] = isset($empDetArr['ETO_LEAP_EMP_LEVEL'])?$empDetArr['ETO_LEAP_EMP_LEVEL']:'';
+					$empDet['is_working'] = isset($empDetArr['ETO_LEAP_EMP_IS_ACTIVE'])?$empDetArr['ETO_LEAP_EMP_IS_ACTIVE']:'';
+					$empDet['errmsg'] = $msg;
+					$res = json_encode($empDet);
+					echo $res;exit;	
+			}
+			$isUpdate = $request->getParam("isUpdate",'');
+			if(!empty($isUpdate)){
+				$Status = $this->etoModel->updateVendorLeapMis($request,$this->glModel);		
+			}
+		  	else{
+		  		$Status = $this->etoModel->addVendorLeapMis($request,$this->glModel);
+		  		}
+		  if(isset($Status['status']) && $Status['status'] == "Success"){
+		      $succMsg = $Status['msg'];
+		  } else if(isset($Status['status']) && $Status['status'] == "Fail"){
+		      $errMsg = $Status['msg'];
+		  }
+		}
+	    }
+	    $this->render('/admineto/vendorleapmis',array('succMsg' => $succMsg,'errMsg' => $errMsg,'showForm' => $showForm));
+	}
+	
+	public function actionDdunMis(){
+	
+		$request = Yii::app()->request;		
+		$ddunMisResult = $this->etoModel->ddunDispHTML($this->glModel,$request);	
+		$this->render("/admineto/ddunmis",array(
+		'result' => $ddunMisResult,
+		'valday'=>$this->valday,
+		'valmonthval' => $this->valmonthval,
+		'valyearval' => $this->valyearval));
+	}
+	
+	public function actionEtoLeapQuality(){		
+		$request = Yii::app()->request;		
+		$etoLeapQcResult = $this->etoModel->showEtoLeapQuality($this->glModel,$request);			
+		$this->render("/admineto/etoleapquality",array(
+							'etoLeapQcResult' => $etoLeapQcResult,
+							'valday'=>$this->valday,
+							'valmonthval' => $this->valmonthval,
+							'valyearval' => $this->valyearval,
+							'cntryArr' => $this->cntryArr
+							)
+						);	
+	}
+	
+	public function actionLeapBLApprovalDashboard() {	
+		$valid = 0;		
+		$request = Yii::app()->request;
+		$months = array('01' => "JAN",'02' => "FEB",'03' => "MAR",'04' => "APR",'05' => "MAY",'06' => "JUN", '07' => "JUL",'08' => "AUG",'09' => "SEP",'10' => "OCT",'11' => "NOV",'12' => "DEC");
+		$monthsStr = array("JAN"=>'01',"FEB"=>'02',"MAR"=>'03',"APR"=>'04',"MAY"=>'05',"JUN" =>'06',"JUL" =>'07',"AUG"=>'08',"SEP" =>'09',"OCT"=>'10',"NOV"=>'11',"DEC"=>'12');
+		$kalpIds = array(27895,29612,29613,29967,32002,33403,36351,35013,36035,28222,27842,32137,29608,29610,36037,36036,29611,37497,37810,37498);
+		$leadIds = array(29687,29688,29689,29731);
+		$ddnIds = array(22287);
+		$noidaIds = array(27,1055,3345,17359,22288,25033,27891,28135,28841,29469,30600,2452,3664,30197,6226,6078,26004,25501,5101,23579,4974,31299,30582,30463,1674,30515,21870,32236,23015,35740);
+		$kocharids = array(30926,30927,30928,34931);
+		$kocharChnids = array(35733,35734,35735);
+		$kocharLDH = array(21870,32888,37055,23746,6251,32084,32086,36545);
+		$cogent = array(38205,38206,38207,38208);
+		$permision = 0;
+		$vendorArr = array();
+		$empData = $this->getEmpIdLVLCode($request);
+	   $empId = $empData['empId'];
+	   if(!empty($empId)) {
+			$valid = $this->model->isValid($request,$empId,$this->glModel);
+		}
+		$vendorRe = $this->leapdashboardModel->getLeapVendor($request,$empId);
+		$permision = $vendorRe['permision'];
+		$vendorArr = $vendorRe['vendorArr'];
+		$returnArray = array(
+				"loginPath" => $this->loginPath,		
+				"valid" => $valid,		
+				"vendorArr" => $vendorArr,		
+				"permision" => $permision,		
+		);		
+		$this->render("/admineto/leapapprovaldashboard",$returnArray);
+	}
+	
+	public function actionGenericMCATReport(){
+			$valid = 0;	
+			$request = Yii::app()->request;
+			$empData = $this->getEmpIdLVLCode($request);
+	  	 	$empId = $empData['empId'];
+	   	if(!empty($empId)) {
+				$valid = $this->model->isValid($request,$empId,$this->glModel);
+			}
+			if($valid != 0){
+				if($request->getParam('action') && $request->getParam('action') == 'genericmcatinfo')
+					{
+						//$genericInfo = $this->etoModel->showGenericMcatInfo($request);
+					}
+					$genericMCATMis = $this->etoModel->showGenericMcatMIS($request);		
+			}
+			$returnArray = array(
+				"loginPath" => $this->loginPath,
+				"valid" => $valid,
+				"months" => $this->valmonthval		
+			);	
+			$this->render("/admineto/genericmcat",$returnArray);
+	}
+	
+}

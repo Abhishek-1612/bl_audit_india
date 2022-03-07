@@ -1,0 +1,10 @@
+<?php
+
+class EtoLeapFlaggedController extends Controller
+{
+	public function actionIndex()
+	{
+		echo"hehre";
+		$this->render('/index');
+	}
+}

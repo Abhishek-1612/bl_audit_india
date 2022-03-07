@@ -1,0 +1,233 @@
+<?php
+if($valid == 0)  {
+	echo "Your are not logged in<BR> Click here to <A HREF=\"$loginPath/index_admin.pl?action=admin\" target=\"_top\">login</A><BR>";
+} else {
+	
+	if(empty($param['offer']) || $param['offer'] == 0 || !preg_match('/^\d+$/', $param['offer'])){ ?>	
+		<div align="center" style="font-family: arial; font-size: 14px; font-weight: bold;">
+			<font color="red">Sorry, Please enter Valid Offer ID</font>
+		</div>
+	<?php exit; 
+	}  ?>
+	<html>
+	<head>
+	<style TYPE="text/css">
+	.admintext {font-family:arial; font-size:11px;line-height:15px;}
+	.admintext1 {font-family:ms sans serif,verdana; font-size:12px;line-height:17px;}
+	.admintlt {font-family:ms sans serif,verdana; size:12px; color:800000; font-weight:bold;}
+	
+        .block1{FONT-SIZE: 12px; border-right:1px #DDF0FF solid;padding-left:10px;padding-right:10px;}
+        .block1 a{COLOR: #0000ff}
+        .block1 .res{font-weight:bold; }
+        .block1 .off{font-weight:bold; COLOR: #000000;}
+        .block1 b{COLOR: #FF4800;FONT-SIZE: 14px;}
+
+	</style>
+	</head>
+	<body>
+	<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tbody><tr>
+		<td colspan="4" style="font-family: arial; font-size: 14px; font-weight: bold;" align="center" bgcolor="#eaeaea" height="30">Mcat Mapping Detail for Offer ID - <font color="red"><?php echo $param['offer']; ?></font> <BR>
+
+	</td>
+	</tr>
+	</tbody></table>
+	
+	<div id="masterdiv" style="clear: both;">
+	<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tbody>
+<?php
+	$i = 0;
+	$j = 0;
+	$orderID =0;	
+	$histID = 0;
+	$empid=0;
+	foreach($returnResult['recMapResult'] as $recK => $recMap){	
+		$i++;
+		if($empid != $recMap['GL_EMP_ID'])	{
+			$actionDisp = '';
+			
+			if(isset($recMap1['ETO_OFR_HIST_EMP_ID']) && $recMap1['ETO_OFR_HIST_EMP_ID'] == $recMap['GL_EMP_ID'])	{
+				$actionDisp = '<B style="color:red;">Auto Mcat Selection </B>';
+			} else if(isset($recMap1['ETO_OFR_HIST_EMP_ID']) && $recMap1['ETO_OFR_HIST_EMP_ID'] != $recMap['GL_EMP_ID']) {
+				$actionDisp = '<B style="color:red;">Auto Mcat Selection </B> by '.$recMap1['GL_EMP_NAME'].' (';
+				$actionDisp .= ($recMap1['ETO_OFR_HIST_EMP_ID']) ?' Emp ID - '.$recMap1['ETO_OFR_HIST_EMP_ID']:'';
+				$actionDisp .= ')';
+				$actionDisp .= ($recMap1['ETO_OFR_HIST_DATE'])?' On '.$recMap1['ETO_OFR_HIST_DATE']:'';
+				$actionDisp .= ' and <B style="color:red;">Changed </B>';
+			}
+			else
+			{
+				$actionDisp = '<B style="color:red;"> Manual Mcat Selection</B>';
+			} 
+
+			echo '
+			<tr><td><BR></td></tr>
+			<tr>
+			<td class="admintext1" align="left"> '.$actionDisp.' by '.$recMap['GL_EMP_NAME'].' (';
+
+			echo ($recMap['GL_EMP_ID'])?' Emp ID - '.$recMap['GL_EMP_ID']:'';
+
+			echo ')';
+			
+			echo ($recMap['ETO_OFR_MAPPING_DATE'])?' On '.$recMap['ETO_OFR_MAPPING_DATE']:'';
+			
+			echo '</td>
+			</tr>';
+			$j=1;
+		}
+
+                echo '
+                <tr>
+                <td class="admintext" align="left" width="100%">
+                <table align="center" border="0" cellpadding="1" cellspacing="1" width="100%">';
+
+                if($j == 1)
+                {
+                        echo '
+                        <tr>
+                        <td class="admintext" align="left" width="20%" bgcolor="#ccccff"><b>Mcat ID</b></td>
+                        <td class="admintext" align="left" width="80%" bgcolor="#ccccff"><b>Mcat Name</b></td>                        
+                        </tr>';
+                }
+
+                echo '
+                <tr>
+                <td class="admintext1" align="left" bgcolor="#eaeaea" width="20%">'.$recMap['GLCAT_MCAT_ID'].'</td>
+                <td class="admintext1" align="left" bgcolor="#eaeaea" width="80%">'.$recMap['GLCAT_MCAT_NAME'].'</td>                
+                </tr>';
+                echo '</table>
+
+                </td>
+                </tr>';
+                $j++;
+        
+		$empid = $recMap['GL_EMP_ID'];
+	}
+	
+
+	if($i == 0)
+	{
+		echo '
+		<tr>
+		<td class="admintext1" align="center" colspan="14">
+		<DIV CLASS="tab-head">No Record Found !</DIV> </td>
+		</tr>';
+	}
+	echo '</tbody></table>';
+
+
+	#### Not Selected Mcats Details ####
+	echo '	
+	<div id="masterdiv1" style="clear: both;">
+	<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tbody>';
+
+       
+
+	$i = 0;
+	$j = 0;
+	$orderID =0;	
+	$histID = 0;
+	$empid=0;
+
+	foreach ($returnResult['recNotMapResult'] as $recNotMapK => $recNotMap) {	
+		$i++;
+		if($empid != $recNotMap['GL_EMP_ID'])
+		{
+			$actionDisp = 'Auto Mcat Not Selected';						
+
+			echo '
+			<tr><td><BR></td></tr>
+			<tr>
+			<td class="admintext1" align="left"> <B style="color:red;">'.$actionDisp.'</B> by '.$recNotMap['GL_EMP_NAME'].' (';
+
+			echo ($recNotMap['GL_EMP_ID'])?' Emp ID - '.$recNotMap['GL_EMP_ID']:'';
+
+			echo ')';
+			
+			echo ($recNotMap['ETO_AUTO_MCAT_SELECTION_DATE'])?' On '.$recNotMap['ETO_AUTO_MCAT_SELECTION_DATE']:'';
+			
+			echo '</td>
+			</tr>';
+			$j=1;
+		}
+
+                echo '
+                <tr>
+                <td class="admintext" align="left" width="100%">
+                <table align="center" border="0" cellpadding="1" cellspacing="1" width="100%">';
+
+                if($j == 1)
+                {
+                        echo '
+                        <tr>
+                        <td class="admintext" align="left" width="20%" bgcolor="#ccccff"><b>Mcat ID</b></td>
+                        <td class="admintext" align="left" width="80%" bgcolor="#ccccff"><b>Mcat Name</b></td>                        
+                        </tr>';
+                }
+
+                echo '
+                <tr>
+                <td class="admintext1" align="left" bgcolor="#eaeaea" width="20%">'.$recNotMap['GLCAT_MCAT_ID'].'</td>
+                <td class="admintext1" align="left" bgcolor="#eaeaea" width="80%">'.$recNotMap['GLCAT_MCAT_NAME'].'</td>                
+                </tr>';
+                echo '</table>
+
+                </td>
+                </tr>';
+                $j++;
+        
+		$empid = $recNotMap['GL_EMP_ID'];
+	}
+
+	echo '</tbody></table>';
+
+	#### Supplier Selection Details ####
+        if(!empty($returnResult['hash']))
+        {
+		echo '
+		<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="padding-top:25px;padding-bottom:20px;">
+		<tbody><tr>
+		<td colspan="4" style="font-family: arial; font-size: 14px; font-weight: bold;" align="center" bgcolor="#eaeaea" height="30">Supplier Selection Details for Offer ID - <font color="red">'.$param["offer"].'</font> <BR></td>
+		</tr>
+		</tbody></table>';
+
+                echo '
+        	<table width="100%" border="0" bgcolor="#f3f3f3" cellspacing="1" cellpadding="0">
+        	<tr>
+                <td width="6%" bgcolor="#FFFFFF" class="block1" style="padding:4px;border-right: none;"><b>Glusr ID</b></td>
+                <td width="27%" bgcolor="#FFFFFF" class="block1" style="padding:4px;border-right: none;"><b>Glusr Company</b></td>
+		<td width="9%" bgcolor="#FFFFFF" class="block1" style="padding:4px;border-right: none;" align="center"><b>Glusr Loc Pref</b></td>
+		<td width="15%" bgcolor="#FFFFFF" class="block1" style="padding:4px;border-right: none;" align="center"><b>Offer/Product Name</b></td>
+		<td width="20%" bgcolor="#FFFFFF" class="block1" style="padding:4px;border-right: none;" align="center"><b>Offer Title</b></td>
+		<td width="20%" bgcolor="#FFFFFF" class="block1" style="padding:4px;border-right: none;" align="center"><b>Search Keyword</b></td>
+		<td width="3%" bgcolor="#FFFFFF" class="block1" style="padding:4px;border-right: none;"><b>Rank</b></td>
+        	</tr>';		
+        }
+
+	$i=1;
+	$bgcolorRANK='';	
+        foreach ($returnResult['hash'] as $k => $hash) {
+        	
+			if(preg_match('m/-/',$hash["SUPPLIER_RANK"])) { 
+			$bgcolorRANK = 'bgcolor="#FFDADA"'; 
+			} else { 
+			$bgcolorRANK = ' bgcolor="#FFFFFF"';
+			}
+			$city = !empty($hash["GLUSR_USR_CITY"])?','.$hash["GLUSR_USR_CITY"]:'';
+			 echo '<tr>
+			 <td $bgcolorRANK class="block1" style="padding:4px;border-right: none;"> '.$hash["GLUSR_USR_ID"].' </td>
+			 <td $bgcolorRANK class="block1" style="padding:4px;border-right: none;">
+			 <a href="'.$hash["GLUSR_USR_URL"].'" target="_blank">'.$hash["GLUSR_COMPANY"].'</a> '.$city.'</td>
+			<td align="center" '.$bgcolorRANK.' class="block1" style="padding:4px;border-right: none;"> '.$hash["GLUSR_USR_LOC_PREF"].' </td>
+			<td align="center" '.$bgcolorRANK.' class="block1" style="padding:4px;border-right: none;"> '.$hash["ITEM_OFR_NAME"].' </td>
+			<td align="center" '.$bgcolorRANK.' class="block1" style="padding:4px;border-right: none;"> '.$hash["ETO_OFR_TITLE"].' </td>
+			<td align="center" '.$bgcolorRANK.' class="block1" style="padding:4px;border-right: none;"> '.$hash["SEARCH_KEYWORD"].' </td>
+			<td align="center" '.$bgcolorRANK.' class="block1" style="padding:4px;border-right: none; font-weight:bold;"> '.$hash["SUPPLIER_RANK"].' </td>
+			</tr>';
+			$i++;
+       }	
+	echo '</table>';
+	echo '</body></html> ';
+	}
