@@ -7,8 +7,6 @@
                 public function actionSampling() 
                 {       
                         
-                        // echo "<pre>";
-                        // print_r($_POST);die('work');
                         $mid =isset($_REQUEST["mid"]) ? $_REQUEST["mid"] : '';
                         $empId = Yii::app()->session['empid'];
                         $tljson='';
@@ -32,8 +30,8 @@
                                 $start_date= $request->getParam('start_date','');
                                 $start_date = (!empty($start_date)?$start_date:(!empty($currentDate)?$currentDate: ''));		
                                 $start_date = strtoupper(date("d-M-Y",strtotime($start_date)));
-                                $dataArr=array();  
-                                $dataArr1=array();                
+                                $dataArr=array();
+                                $dataArr1=array();
                                 $obj = new FlagAuditModel;
                                 $etoModel =  new AdminEtoForm();
                                 $leapdashboardModel =  new LeapDashboardModel();
