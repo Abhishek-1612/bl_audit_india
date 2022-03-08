@@ -5,7 +5,7 @@ class FlagAuditModel extends CFormModel
     public function testData1($empId, $start_date, $end_date, $maxrecords, $vendor_approval, $agentid, $bucket, $action, $vendorArr,$source)
     {    
         // Testing Code
-        
+
         $poolname = isset($_REQUEST['pool']) ? $_REQUEST['pool'] : '';
         $poolval  = isset($_REQUEST['poolVal']) ? $_REQUEST['poolVal'] : '';
         $sample_type  = isset($_REQUEST['sample_type']) ? $_REQUEST['sample_type'] : 0;
@@ -653,7 +653,7 @@ class FlagAuditModel extends CFormModel
                 'EMP_ID' => $BL_AUDIT_RESPONSE_EMP_ID,
                 'action' => 'Insert'
             );
-            echo "<pre>";print_r($content);die('worksssss');
+            echo "<pre>";print_r($content);die('works');
          
             if ($_SERVER['SERVER_NAME'] == 'dev-gladmin.intermesh.net' || $_SERVER['SERVER_NAME'] == 'stg-gladmin.intermesh.net') {
                 $url = 'http://stg-leads.imutils.com/wservce/glreport/blaudit/';

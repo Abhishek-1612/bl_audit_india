@@ -4236,7 +4236,7 @@ class GlobalmodelForm extends CFormModel {
                 $dbName = str_replace("oci:dbname=", "", $dbName);
                 $a = explode(';', $dbName);
                 if(isset($a[2])){
-                    $dbName = $a[2]; 
+                    $dbName = $a[2];
                 }
                 if (!$sth_sql) {
                     $this->send_oracle_error($file_name, $lineno, $class, $prepareError, $e, $st . $message, $mailId, $mailId, $mailId, "Oracle Error from " . getenv('HTTP_HOST'), "Gladmin Team");
