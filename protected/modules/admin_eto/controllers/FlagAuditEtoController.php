@@ -10,20 +10,21 @@
                         // echo "<pre>";
                         // print_r($_POST);die('work');
                         $mid =isset($_REQUEST["mid"]) ? $_REQUEST["mid"] : '';
-                        $emp_id = Yii::app()->session['empid'];
+                        $empId = Yii::app()->session['empid'];
                         $tljson='';
-                        // if(!$empId)
-                        // {
-                        // 	print "You are not logged in";
-                        //      exit;
-                        // }
-                        //$user_permissions=GL_LoginValidation::CheckModulePermission($mid, $empId);
+                        $empId = '91476'; // Testing
+                        if(!$empId)
+                        {
+                        	print "You are not logged in";
+                             exit;
+                        }
+                        // $user_permissions=GL_LoginValidation::CheckModulePermission($mid, $empId);
                         if(empty($user_permissions))
                         {
                                 $user_permissions['TOVIEW'] = $user_permissions['TOEDIT']=$user_permissions['TOADD'] =$user_permissions['TODELETE']='';
                         }	
                         isset($user_permissions['TOVIEW']) ? $user_permissions['TOVIEW'] : '';  	
-                        $user_view =1;
+                        $user_view =1; // Testing
                         if($user_view ==1)
                         {                
                                 $currentDate = date("d-m-Y");
@@ -36,9 +37,9 @@
                                 $obj = new FlagAuditModel;
                                 $etoModel =  new AdminEtoForm();
                                 $leapdashboardModel =  new LeapDashboardModel();
-                                // $vendorRe = $leapdashboardModel->getLeapVendor_list($request,$empId);
-                                // $allVenders=$leapdashboardModel->allvendernames();
-                                // $arr_lvl_code = $etoModel->getLeapEmpLVL($empId);
+                                $vendorRe = $leapdashboardModel->getLeapVendor_list($request,$empId);
+                                $allVenders=$leapdashboardModel->allvendernames();
+                                $arr_lvl_code = $etoModel->getLeapEmpLVL($empId);
                                 $permision = $vendorRe['permision'];
                                 $vendorArr = $vendorRe['vendorArr'];
                                 $vendor_approval = $request->getParam("vendor_approval",'');
@@ -75,18 +76,19 @@
                 {      
                         $empId = Yii::app()->session['empid'];
                         $mid =isset($_REQUEST["mid"]) ? $_REQUEST["mid"] : '';
-                        // if(!$empId)
-                        // {
-                        //         print "You are not logged in";
-                        //         exit;
-                        // }
-                        // $user_permissions=GL_LoginValidation::CheckModulePermission($mid, $empId);
+                        $empId = '91476'; // Testing
+                        if(!$empId)
+                        {
+                                print "You are not logged in";
+                                exit;
+                        }
+                        $user_permissions=GL_LoginValidation::CheckModulePermission($mid, $empId);
                         if(empty($user_permissions))
                         {
                         $user_permissions['TOVIEW'] = $user_permissions['TOEDIT']=$user_permissions['TOADD'] =$user_permissions['TODELETE']='';
                         }		
                         $user_view = isset($user_permissions['TOVIEW']) ? $user_permissions['TOVIEW'] : '';  
-                        $user_view = 1;
+                        $user_view = 1; //Testing
                         if($user_view ==1)
                         {  
                                 $obj =new FlagAuditModel;

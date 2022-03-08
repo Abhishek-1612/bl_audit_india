@@ -145,6 +145,7 @@ class FlagAuditModel extends CFormModel
         $limitcond='';$cond2 = '';           $page_html='';$sn=0;
        
         if ($delsource == 'direct') {
+            // die('work');
             
             if($start_date<>'' ){
                 $cond .= " and date_trunc('day'::text, eto_ofr_deletiondate) = '$start_date'";
