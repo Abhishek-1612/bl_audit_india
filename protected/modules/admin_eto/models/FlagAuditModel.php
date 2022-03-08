@@ -651,7 +651,7 @@ class FlagAuditModel extends CFormModel
                 'EMP_ID' => $BL_AUDIT_RESPONSE_EMP_ID,
                 'action' => 'Insert'
             );
-            echo "<pre>";print_r($opt_ids_array);die('work');
+            echo "<pre>";print_r($content);die('worksssss');
          
             if ($_SERVER['SERVER_NAME'] == 'dev-gladmin.intermesh.net' || $_SERVER['SERVER_NAME'] == 'stg-gladmin.intermesh.net') {
                 $url = 'http://stg-leads.imutils.com/wservce/glreport/blaudit/';

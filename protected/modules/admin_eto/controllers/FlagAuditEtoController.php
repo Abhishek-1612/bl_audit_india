@@ -82,7 +82,7 @@
                                 print "You are not logged in";
                                 exit;
                         }
-                        $user_permissions=GL_LoginValidation::CheckModulePermission($mid, $empId);
+                        // $user_permissions=GL_LoginValidation::CheckModulePermission($mid, $empId);
                         if(empty($user_permissions))
                         {
                         $user_permissions['TOVIEW'] = $user_permissions['TOEDIT']=$user_permissions['TOADD'] =$user_permissions['TODELETE']='';
