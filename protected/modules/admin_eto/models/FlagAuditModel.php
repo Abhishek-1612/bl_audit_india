@@ -5,6 +5,7 @@ class FlagAuditModel extends CFormModel
     public function testData1($empId, $start_date, $end_date, $maxrecords, $vendor_approval, $agentid, $bucket, $action, $vendorArr,$source)
     {    
         // Testing Code
+        
         $poolname = isset($_REQUEST['pool']) ? $_REQUEST['pool'] : '';
         $poolval  = isset($_REQUEST['poolVal']) ? $_REQUEST['poolVal'] : '';
         $sample_type  = isset($_REQUEST['sample_type']) ? $_REQUEST['sample_type'] : 0;
