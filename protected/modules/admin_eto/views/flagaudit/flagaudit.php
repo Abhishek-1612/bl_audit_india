@@ -323,6 +323,7 @@
         var a ={};
         var x={};
         var ids = document.getElementById("all_ofr_id").value.split(",");
+        console.log(ids);
         for(var j=0;j<ids.length;j++)
         {
             ofrid= ids[j];
@@ -338,7 +339,7 @@
                         }                      
                 }
                 if(sel_grp === false){
-                    alert("Please Select Atleast one error option for Offer Id " + ofrid);                                 
+                    alert("Please Select Atleast one Flagged option for Offer Id " + ofrid);                                 
                     return false;
                 } 
             }  
@@ -382,6 +383,7 @@
             }
         }                
         var newArr=JSON.stringify(x);
+        // console.log(newArr);
         a['opt_ids']=newArr;
         $("#save_all").hide();   
         $.ajax({ 	 	
