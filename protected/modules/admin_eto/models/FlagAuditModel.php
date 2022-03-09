@@ -623,7 +623,6 @@ class FlagAuditModel extends CFormModel
     }
     public function save_audit_details()
     {
-        
         // $serv_model               = new ServiceGlobalModelForm();
         $BL_AUDIT_RESPONSE_EMP_ID = Yii::app()->session['empid'];
         $errormessage             = '';
