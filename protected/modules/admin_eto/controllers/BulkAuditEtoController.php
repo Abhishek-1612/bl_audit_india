@@ -51,8 +51,7 @@ class BulkAuditEtoController extends Controller
                          $dataArr=$obj->auditSample($empId,$start_date,'',$maxrecords,$vendor_approval,$agentid,$bucket,$action,$vendorArr,''); 
                          $obj->printsample($dataArr);//,$dataArr1);
                        exit;
-                   }else{
-                           
+                   }else{  
                        $this->render('/bulkaudit/delaudit');
                    }
                 }else{

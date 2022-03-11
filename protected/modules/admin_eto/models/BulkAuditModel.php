@@ -1035,7 +1035,6 @@ ORDER  BY BL_AUDIT_RESPONSE_ID,
                 $cond $cond2 $poolcond union all SELECT ETO_LEAP_EMP_ID, ETO_OFR_DISPLAY_ID FROM ETO_OFR_TEMP_DEL_ARCH, ETO_LEAP_MIS_INTERIM  "
                . "WHERE ETO_OFR_DELETEDBYID = ETO_LEAP_EMP_ID $cond_sample_type $cond $cond2 $poolcond ) A group by ETO_LEAP_EMP_ID "
                . "having count(ETO_OFR_DISPLAY_ID) >=1 order by count(ETO_OFR_DISPLAY_ID) desc";
-           
       }else{
           $sql_page="SELECT count(ETO_OFR_DISPLAY_ID) cnt,substring (string_agg(ETO_OFR_DISPLAY_ID::text, ','),0,24) OFR_LIST,ETO_LEAP_EMP_ID, COUNT(1) OVER()TOTALCNT 
                 FROM (
