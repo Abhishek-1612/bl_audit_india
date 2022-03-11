@@ -70,8 +70,6 @@
                             <font color="red"> Approval Required but Flagged</font>
                         </td>
                     </tr>
-
-                    
                     <tr>
                         <td>
                             <input onclick = "validate_opt(this.name)"  type="checkbox" <?= $check2;?> width="100px" value="229" name="<?= 'chk_' . $offerID;?>" id="<?= 'chk_229_'. $offerID; ?>">
