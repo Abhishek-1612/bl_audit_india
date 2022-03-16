@@ -72,6 +72,7 @@
 
                 public function actionAudit() 
                 {      
+                        echo "<pre>"; print_r($_REQUEST);die;
                         $empId = Yii::app()->session['empid'];
                         $mid =isset($_REQUEST["mid"]) ? $_REQUEST["mid"] : '';
                         $empId = '91476'; // Testing
