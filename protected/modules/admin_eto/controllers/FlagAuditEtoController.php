@@ -44,7 +44,6 @@
                                 $bucket = $request->getParam("bucket",'ALL');
                                 $maxrecords= $request->getParam("maxrecords",10);
                                 $agentid= $request->getParam("agentselect",0);
-
                                 if(isset($_REQUEST['submit_view']))
                                 {       
                                         $action="submit_view";
@@ -72,7 +71,7 @@
 
                 public function actionAudit() 
                 {      
-                        echo "<pre>"; print_r($_REQUEST);die;
+                        // echo "<pre>"; print_r($_REQUEST);die;
                         $empId = Yii::app()->session['empid'];
                         $mid =isset($_REQUEST["mid"]) ? $_REQUEST["mid"] : '';
                         $empId = '91476'; // Testing
@@ -84,7 +83,7 @@
                         // $user_permissions=GL_LoginValidation::CheckModulePermission($mid, $empId);
                         if(empty($user_permissions))
                         {
-                        $user_permissions['TOVIEW'] = $user_permissions['TOEDIT']=$user_permissions['TOADD'] =$user_permissions['TODELETE']='';
+                                $user_permissions['TOVIEW'] = $user_permissions['TOEDIT']=$user_permissions['TOADD'] =$user_permissions['TODELETE']='';
                         }		
                         $user_view = isset($user_permissions['TOVIEW']) ? $user_permissions['TOVIEW'] : '';  
                         $user_view = 1; //Testing

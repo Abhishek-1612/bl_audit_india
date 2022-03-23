@@ -201,14 +201,14 @@ class BulkAuditEtoController extends Controller
                         $end_date = (!empty($end_date)?$end_date:(!empty($currentDate)?$currentDate: ''));		
                         $end_date = strtoupper(date("d-M-Y",strtotime($end_date)));
                         $dataArr=array();
-                        $auditdet=array();             
+                        $auditdet=array();
                         $obj =new BulkAuditModel;	
                         $auditId= $request->getParam('auditid','');
                         $offer_id= $request->getParam('offer_id','');
                         $auditdet=$obj->auditdetailbyID($auditId);
                         $delsource=isset($auditdet[0]['DELSOURCE'])?$auditdet[0]['DELSOURCE']:'';
-                         $action="";
-                         $dataArr=$obj->auditSample($empId,'','','1','','','',$action,'',$delsource); 
+                        $action="";
+                        $dataArr=$obj->auditSample($empId,'','','1','','','',$action,'',$delsource); 
                         $this->render('/bulkaudit/delauditedit',array('dataArr'=>$dataArr,'auditdet'=>$auditdet , 'auditid'=>$auditId));
                   
                 }else{

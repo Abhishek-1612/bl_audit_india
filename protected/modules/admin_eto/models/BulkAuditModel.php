@@ -422,7 +422,7 @@ class BulkAuditModel extends CFormModel
         $strt1        = strtotime($start_date);
         $end1         = strtotime($end_date);
         $today        = strtotime(date("d-M-Y"));
-     $rtype =isset($_REQUEST["rtype"]) ? $_REQUEST["rtype"] : '';
+        $rtype =isset($_REQUEST["rtype"]) ? $_REQUEST["rtype"] : '';
         $offerid      = isset($_REQUEST['offer_id']) ? $_REQUEST['offer_id'] : '';
         $offerid      = trim($offerid);
         $auditId      = trim($auditId);   
@@ -851,9 +851,8 @@ ORDER  BY BL_AUDIT_RESPONSE_ID,
                     $d2_file=preg_replace('/[^A-Za-z0-9\-,+\(\):]/', ' ', $d1_file);
                     $d3_file=preg_replace('/,\s/', "", $d2_file);
                     fwrite($filename,"$d3_file\t\n");                
-                $i++;
+                    $i++;
             }
-
             fclose($filename);
             $this->export($filename_out);
            }else{

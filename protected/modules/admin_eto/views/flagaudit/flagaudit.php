@@ -282,7 +282,7 @@
         $("#userstat_"+offerid).html('Processing...');    
         $.ajax({
             type: "POST",
-            url:"/index.php?r=admin_eto/OfferDetail/showuserstats&offerid="+offerid+"&glusrid="+glusrid,
+            url:"./index.php?r=admin_eto/OfferDetail/showuserstats&offerid="+offerid+"&glusrid="+glusrid,
                     data: "",
             success: function(response){            
                 $("#userstat_"+offerid).html(response);            

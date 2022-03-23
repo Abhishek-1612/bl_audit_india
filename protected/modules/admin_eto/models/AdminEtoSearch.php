@@ -11,10 +11,9 @@ public function showAdvSearchResultPG($request,$emp_id,$model,$statusDesc,$userS
         }else{
             $dbh = $conn_obj->connect_db_yii('postgress_web68v'); 
         }
-  	$offersPerPage= 25; 
- 	
-         $result_type=$cond_dir=$cond=$cond_fenq='';
-  	$sql_total=$mcat_table=$mcat_table_expired='';
+  	    $offersPerPage= 25; 
+ 	    $result_type=$cond_dir=$cond=$cond_fenq='';
+  	    $sql_total=$mcat_table=$mcat_table_expired='';
         $bindParam = array();
         $critHash= array(); 
         $critHash['memmail']=$memmail = $request->getParam('memmail','');	
