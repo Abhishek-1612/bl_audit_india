@@ -9,7 +9,6 @@ class AdminEtoForm extends CFormModel{
 		$postParamArr['user'] = $user= $request->getParam('user','');
 		$postParamArr['client'] = $client= $request->getParam('client','');
 		$postParamArr['ofrcnt'] = $ofrcnt= $request->getParam('ofrcnt','');
-		
 		$postParamArr['S_city'] = $S_city= $request->getParam('S_city','') ;
 		$postParamArr['usr_city'] = $usr_city=$request->getParam('usr_city','');
 		$postParamArr['usr_cityId'] = $usr_cityId=$request->getParam('usr_cityId','');
@@ -90,9 +89,9 @@ class AdminEtoForm extends CFormModel{
                         
 			$sthStatus = $model->runSelect(__FILE__,__LINE__,__CLASS__,$dbh,$sqlStatus,array(":DISPLAY_ID"=>$offerID));
 			$statusArr1 = $sthStatus->read();
-                        if($statusArr1){
-                        $statusArr=array_change_key_case($statusArr1, CASE_UPPER);
-                        }
+            if($statusArr1){
+                $statusArr=array_change_key_case($statusArr1, CASE_UPPER);
+            }
 			$status = isset($statusArr['STATUS'])?$statusArr['STATUS']:'';	
 			$stsArr = array(
                         'F' => 'ETO_OFR',

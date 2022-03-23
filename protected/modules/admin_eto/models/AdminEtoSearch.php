@@ -653,10 +653,10 @@ public function showAdvSearchResultFenqPG($request) {
         $critHash['memmail']=$memmail = $request->getParam('memmail','');	
         $critHash['mem']=$mem = $request->getParam('mem','');  
         $critHash['offer']=$offer = $request->getParam('offer',0);
-  	$critHash['memmobile']=$memmobile = $request->getParam('memmobile','');
+  	    $critHash['memmobile']=$memmobile = $request->getParam('memmobile','');
         $critHash['ph_country']=$ph_country = $request->getParam('ph_country','');
         $critHash['status']=$status = $request->getParam('status','D');  
-	$memmail = $request->getParam('memmail','');
+	    $memmail = $request->getParam('memmail','');
         $bindParam=$rec=array();
         $whereCond_expired='';
         if($status=='E'){
@@ -670,16 +670,16 @@ public function showAdvSearchResultFenqPG($request) {
                                $whereCond_expired= "  GLUSR_USR.GLUSR_USR_EMAIL=:memmail";
                                $bindParam[':memmail'] = $memmail;     
                     }elseif(!empty($memmobile)){
-                              if($ph_country=='IN')
-                              {
-                              $whereCond_expired="  GLUSR_USR.GLUSR_USR_PH_MOBILE=:memmobile AND GLUSR_USR.GLUSR_USR_PH_COUNTRY='91'";  
-                               $bindParam[':memmobile'] = $memmobile;
-                          }
-                          else
-                          {
-                               $whereCond_expired= "  GLUSR_USR.GLUSR_USR_PH_MOBILE=:memmobile AND GLUSR_USR.GLUSR_USR_PH_COUNTRY<>'91'";  
-                               $bindParam[':memmobile'] =$memmobile;
-                          }
+                        if($ph_country=='IN')
+                        {
+                            $whereCond_expired="  GLUSR_USR.GLUSR_USR_PH_MOBILE=:memmobile AND GLUSR_USR.GLUSR_USR_PH_COUNTRY='91'";  
+                            $bindParam[':memmobile'] = $memmobile;
+                        }
+                        else
+                        {
+                            $whereCond_expired= "  GLUSR_USR.GLUSR_USR_PH_MOBILE=:memmobile AND GLUSR_USR.GLUSR_USR_PH_COUNTRY<>'91'";  
+                            $bindParam[':memmobile'] =$memmobile;
+                        }
                     } 
 
                    

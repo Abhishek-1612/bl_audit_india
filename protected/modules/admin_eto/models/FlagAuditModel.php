@@ -36,7 +36,7 @@ class FlagAuditModel extends CFormModel
         $deletedsample       = isset($_REQUEST['deletedsample']) ? $_REQUEST['deletedsample'] : 'NO';
         $deletedreason       = isset($_REQUEST['deletedreasonselect']) ? $_REQUEST['deletedreasonselect'] : 'ALL';
         $deletedcall_noncall = isset($_REQUEST['deletedcall_noncall']) ? $_REQUEST['deletedcall_noncall'] : 'ALL';
-        $delsource           = isset($_REQUEST['delsource']) ? $_REQUEST['delsource'] : 'direct';
+        // $delsource           = isset($_REQUEST['delsource']) ? $_REQUEST['delsource'] : 'direct';
         $leadtype            = isset($_REQUEST['leadtype']) ? $_REQUEST['leadtype'] : '';
         $buyer_type          = isset($_REQUEST['buyer_type']) ? $_REQUEST['buyer_type'] : '';
         $offerid             = isset($_REQUEST['offer_id']) ? $_REQUEST['offer_id'] : '';
@@ -145,9 +145,7 @@ class FlagAuditModel extends CFormModel
             $poolcond .= " AND COALESCE(USER_IDENTIFIER_FLAG,0) IN ($flag)";
         }
         $limitcond='';$cond2 = '';           $page_html='';$sn=0;
-       
-        if ($delsource == 'direct') {
-            // die('work');
+        // if ($delsource == 'direct') {
             
             if($start_date<>'' ){
                 $cond .= " and date_trunc('day'::text, eto_ofr_deletiondate) = '$start_date'";
@@ -198,61 +196,62 @@ class FlagAuditModel extends CFormModel
                 
                 $random_order_cond $limitcond";
           
-        }else {
-                if($start_date<>'' ){
-                    $cond .= " and date(eto_ofr_deletiondate) = TO_DATE('$start_date','DD-MON-YYYY') ";
-                    $cond .= ' and action in (14,12)';
-                }
-             if (!empty($offerid) && preg_match('/^\d+$/',$offerid)) {
-                $cond2 .= " AND DIR_QUERY_FREE_REFID= :offerid";
-                $random_order_cond= "";
-                $bind[':offerid'] = $offerid;
-            }
-            if ($deletedreason <> 'ALL') {
-                $cond2 .= " AND COALESCE(FENQ_CALL_DEL_REASON,FENQ_DEL_REASON) =:deletedreason ";
-                $bind[':deletedreason'] = $deletedreason;
-            }
-            if ($deletedcall_noncall == 1) {
-                $cond2 .= " AND FENQ_CALL_RECORDING_URL IS NOT NULL  AND ETO_OFR_FENQ_EMP_ID > 0 ";
-            }
-            if ($deletedcall_noncall == 2) {
-                $cond2 .= " AND FENQ_CALL_RECORDING_URL IS  NULL  AND ETO_OFR_FENQ_EMP_ID > 0 ";
-            }
-            if ($deletedcall_noncall == 3) { 
-                $cond2 .= " AND ETO_OFR_IS_FLAGGED IS NOT  NULL  AND ETO_OFR_FENQ_EMP_ID > 0 ";
-            }
-            if ($deletedcall_noncall == 4) {
-                $cond2 .= " AND ETO_OFR_FENQ_EMP_ID < 0 ";
-            }
-            if ($deletedcall_noncall == 5) {
-                $cond2 .= " AND ETO_OFR_FENQ_EMP_ID > 0 ";
-            }
-            $poolcond = str_replace("FK_GL_COUNTRY_ISO", "S_COUNTRY_UPPER", $poolcond);
+        // }
+        // else {
+        //         if($start_date<>'' ){
+        //             $cond .= " and date(eto_ofr_deletiondate) = TO_DATE('$start_date','DD-MON-YYYY') ";
+        //             $cond .= ' and action in (14,12)';
+        //         }
+        //      if (!empty($offerid) && preg_match('/^\d+$/',$offerid)) {
+        //         $cond2 .= " AND DIR_QUERY_FREE_REFID= :offerid";
+        //         $random_order_cond= "";
+        //         $bind[':offerid'] = $offerid;
+        //     }
+        //     if ($deletedreason <> 'ALL') {
+        //         $cond2 .= " AND COALESCE(FENQ_CALL_DEL_REASON,FENQ_DEL_REASON) =:deletedreason ";
+        //         $bind[':deletedreason'] = $deletedreason;
+        //     }
+        //     if ($deletedcall_noncall == 1) {
+        //         $cond2 .= " AND FENQ_CALL_RECORDING_URL IS NOT NULL  AND ETO_OFR_FENQ_EMP_ID > 0 ";
+        //     }
+        //     if ($deletedcall_noncall == 2) {
+        //         $cond2 .= " AND FENQ_CALL_RECORDING_URL IS  NULL  AND ETO_OFR_FENQ_EMP_ID > 0 ";
+        //     }
+        //     if ($deletedcall_noncall == 3) { 
+        //         $cond2 .= " AND ETO_OFR_IS_FLAGGED IS NOT  NULL  AND ETO_OFR_FENQ_EMP_ID > 0 ";
+        //     }
+        //     if ($deletedcall_noncall == 4) {
+        //         $cond2 .= " AND ETO_OFR_FENQ_EMP_ID < 0 ";
+        //     }
+        //     if ($deletedcall_noncall == 5) {
+        //         $cond2 .= " AND ETO_OFR_FENQ_EMP_ID > 0 ";
+        //     }
+        //     $poolcond = str_replace("FK_GL_COUNTRY_ISO", "S_COUNTRY_UPPER", $poolcond);
             
-            $cond=str_replace("eto_ofr_deletiondate", "ETO_OFR_FENQ_DATE", $cond);
-            // for 1 / 2 sample per associate
-            if($ofrlist == '' && $sample_per_associate==2){
-                $ofrlist=$this->print_pagination($delsource,$dbh,$bind,$model,$cond ,$cond2 ,$poolcond,$cond_sample_type);
-                if($ofrlist <> ''){
-                $cond2 .= " AND DIR_QUERY_FREE_REFID IN($ofrlist) ";
-                }
-            }elseif($ofrlist <>'' && $sample_per_associate==2){
-                $cond2 .= " AND DIR_QUERY_FREE_REFID IN($ofrlist) ";
-            }
-            // end 1/2 sample per associate
+        //     $cond=str_replace("eto_ofr_deletiondate", "ETO_OFR_FENQ_DATE", $cond);
+        //     // for 1 / 2 sample per associate
+        //     if($ofrlist == '' && $sample_per_associate==2){
+        //         $ofrlist=$this->print_pagination($delsource,$dbh,$bind,$model,$cond ,$cond2 ,$poolcond,$cond_sample_type);
+        //         if($ofrlist <> ''){
+        //         $cond2 .= " AND DIR_QUERY_FREE_REFID IN($ofrlist) ";
+        //         }
+        //     }elseif($ofrlist <>'' && $sample_per_associate==2){
+        //         $cond2 .= " AND DIR_QUERY_FREE_REFID IN($ofrlist) ";
+        //     }
+        //     // end 1/2 sample per associate
                           
-            $sql = "SELECT eto_ofr_call_recording_url CALL_RECORDING_URL,fk_glusr_usr_id,eto_ofr_display_id,eto_ofr_title,
-            To_char(activity_time, 'DD-Mon-YYYY') ETO_OFR_APPROV_DATE,fk_gl_module_id,
-            eto_leap_vendor_name,eto_leap_emp_name,eto_leap_emp_id, (CASE WHEN ETO_ENQ_TYP IN (1,3,5) THEN 'Retail' ELSE 'Non Retail' END) || ' / ' || 
-            (CASE WHEN ETO_OFR_DISPLAY_TYPE=11 THEN 'Frequent' ELSE 'Non Frequent' END) || (CASE WHEN USER_IDENTIFIER_FLAG =24 THEN ' / High AOV' END) 
-            LEAD_TYPE 
-            FROM eto_leap_mis_interim,LEAP_ACTIVITY_STATS_arch, eto_ofr_temp_del_arch
-            WHERE eto_ofr_temp_del_arch.fk_employee_id = eto_leap_emp_id 
-                $cond
-                $cond2
-                $poolcond  
-                $random_order_cond  $limitcond ";            
-        } 
+        //     $sql = "SELECT eto_ofr_call_recording_url CALL_RECORDING_URL,fk_glusr_usr_id,eto_ofr_display_id,eto_ofr_title,
+        //     To_char(activity_time, 'DD-Mon-YYYY') ETO_OFR_APPROV_DATE,fk_gl_module_id,
+        //     eto_leap_vendor_name,eto_leap_emp_name,eto_leap_emp_id, (CASE WHEN ETO_ENQ_TYP IN (1,3,5) THEN 'Retail' ELSE 'Non Retail' END) || ' / ' || 
+        //     (CASE WHEN ETO_OFR_DISPLAY_TYPE=11 THEN 'Frequent' ELSE 'Non Frequent' END) || (CASE WHEN USER_IDENTIFIER_FLAG =24 THEN ' / High AOV' END) 
+        //     LEAD_TYPE 
+        //     FROM eto_leap_mis_interim,LEAP_ACTIVITY_STATS_arch, eto_ofr_temp_del_arch
+        //     WHERE eto_ofr_temp_del_arch.fk_employee_id = eto_leap_emp_id 
+        //         $cond
+        //         $cond2
+        //         $poolcond  
+        //         $random_order_cond  $limitcond ";            
+        // } 
         
         $sth                     = $model->runSelect(__FILE__, __LINE__, __CLASS__, $dbh, $sql, $bind);
             $prev_empid='';$counter=0;
@@ -312,7 +311,7 @@ class FlagAuditModel extends CFormModel
         $deletedsample       = isset($_REQUEST['deletedsample']) ? $_REQUEST['deletedsample'] : 'NO';
         $deletedreason       = isset($_REQUEST['deletedreasonselect']) ? $_REQUEST['deletedreasonselect'] : 'ALL';
         $deletedcall_noncall = isset($_REQUEST['deletedcall_noncall']) ? $_REQUEST['deletedcall_noncall'] : 'ALL';
-        $delsource           = isset($_REQUEST['delsource']) ? $_REQUEST['delsource'] : 'direct';
+        // $delsource           = isset($_REQUEST['delsource']) ? $_REQUEST['delsource'] : 'direct';
         $leadtype            = isset($_REQUEST['leadtype']) ? $_REQUEST['leadtype'] : '';
         $buyer_type          = isset($_REQUEST['buyer_type']) ? $_REQUEST['buyer_type'] : '';
         $offerid             = isset($_REQUEST['offer_id']) ? $_REQUEST['offer_id'] : '';
@@ -421,7 +420,7 @@ class FlagAuditModel extends CFormModel
             $poolcond .= " AND COALESCE(USER_IDENTIFIER_FLAG,0) IN ($flag)";
         }
         $limitcond='';$cond2 = '';           $page_html='';$sn=0;
-       
+        
         if ($delsource == 'direct') {
             
             if($start_date<>'' ){

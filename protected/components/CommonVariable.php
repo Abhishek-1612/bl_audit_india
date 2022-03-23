@@ -701,7 +701,6 @@ public static function get_country_name() {
         "IOS"=>"IM IOS APP",
         "IPP"=>"Indian Plastic Portal",
         "ITP"=>"Indian Travel Portal",
-        
         "KOREA"=>"KOREA",
         "LABEQUIP"=>"Laboratory Equipment World",
         "LEAP"=>"BL-Leap CRM ",

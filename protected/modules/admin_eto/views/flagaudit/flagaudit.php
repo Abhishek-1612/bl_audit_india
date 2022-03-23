@@ -29,34 +29,34 @@
         $search=isset($_REQUEST['stype']) ? $_REQUEST['stype'] : '';
         $stype=isset($_REQUEST['stype'])?$_REQUEST['stype']:'';
         $start_date1=isset($start_date)?$start_date:'';
-        $deletedreasonArr=array(
-            1=>'Duplicate Requirement',
-            3=>'Invalid Description',
-            10=>'Wrong Contact Details',
-            14=>'Is a Supplier',
-            15=>'No Requirement',
-            63 => 'No Requirement - Price Only',
-            17=>'Test Requirement Posted',
-            21=>'Job Enquiry',
-            24=>'Not Ready to Confirm',
-            33=>'Not Talked Lead',
-            16=>'Do Not Call',
-            31=>'Banned and Adult Product',
-            35=>'One Time Pending Deletion',
-            45=>'Deleted because one similar lead recently approved',
-            11=>'Offer Rejected',
-            53=>'Lead from IM employee',
-            52=>'3 leads deleted on call',
-            41=>'Drugs Keywords',
-            51=>'Drugs Keywords',
-            49=>'Duplicate Generation - Time',
-            61=>'User Registered With Blacklisted Country',
-            36=>'Blacklisted User',
-            37=>'Disabled User',
-            38=>'Invalid Email Domains',
-            64=>'Calling Required',
-            26=>'Language Barrier'
-        );
+        // $deletedreasonArr=array(
+        //     1=>'Duplicate Requirement',
+        //     3=>'Invalid Description',
+        //     10=>'Wrong Contact Details',
+        //     14=>'Is a Supplier',
+        //     15=>'No Requirement',
+        //     63 => 'No Requirement - Price Only',
+        //     17=>'Test Requirement Posted',
+        //     21=>'Job Enquiry',
+        //     24=>'Not Ready to Confirm',
+        //     33=>'Not Talked Lead',
+        //     16=>'Do Not Call',
+        //     31=>'Banned and Adult Product',
+        //     35=>'One Time Pending Deletion',
+        //     45=>'Deleted because one similar lead recently approved',
+        //     11=>'Offer Rejected',
+        //     53=>'Lead from IM employee',
+        //     52=>'3 leads deleted on call',
+        //     41=>'Drugs Keywords',
+        //     51=>'Drugs Keywords',
+        //     49=>'Duplicate Generation - Time',
+        //     61=>'User Registered With Blacklisted Country',
+        //     36=>'Blacklisted User',
+        //     37=>'Disabled User',
+        //     38=>'Invalid Email Domains',
+        //     64=>'Calling Required',
+        //     26=>'Language Barrier'
+        // );
     ?>
     <form name="sampleForm" id="sampleForm" method="post" action="/index.php?r=admin_eto/bulkauditEto/Sampling&mid=3794" style="margin-top:0;margin-bottom:0;">
         <table style="border-collapse: collapse;" border="1" class="flatTable" bordercolor="#bedaff" cellpadding="4" cellspacing="0" width="100%">
@@ -75,9 +75,9 @@
                 </td>
                 <td  CLASS="admintext">
                     <span id="deletedreason" name="deletedreason">
-                        &nbsp;Direct&nbsp;&nbsp;<input type="radio" name="delsource" value="direct" id="delsource" checked>
+                        <!-- &nbsp;Direct&nbsp;&nbsp;<input type="radio" name="delsource" value="direct" id="delsource" checked>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fenq&nbsp;&nbsp;<input type="radio" name="delsource" value="fenq" id="delsource">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
                         <select name="deletedcall_noncall" id="deletedcall_noncall">
                             <option value="0">ALL</option>
                             <option value="1">With Call</option>
@@ -246,14 +246,14 @@
         a['agent_select']=$('#agent_select').val();
         a['agentselect']=$('#agentselect').val();  
         a['offer_id']=$('#offer_id').val(); 
-        if($('input[name="delsource"]:checked').val() =='direct')
-        {
-            a['delsource']='direct';
-        }
-        else
-        {
-            a['delsource']='fenq';
-        }
+        // if($('input[name="delsource"]:checked').val() =='direct')
+        // {
+        //     a['delsource']='direct';
+        // }
+        // else
+        // {
+        //     a['delsource']='fenq';
+        // }
         a['bucket']=$('#bucket').val();  
         a['deletedreasonselect']=$('#deletedreasonselect').val();
         a['deletedcall_noncall']=$('#deletedcall_noncall').val();
@@ -353,7 +353,7 @@
             primeId2="chk_"+ofrid;
             var opt_val= $('input:radio[name=\''+primeId+'\']:checked').val();
             optionvalues.push(opt_val);
-            questionvalues.push('32');
+            questionvalues.push('46');
             var rem_val=$('#remarks_'+ofrid).val();
             var opt_id=ofrid;
             if(opt_val==227){                            
@@ -371,7 +371,7 @@
                 {
                     if(opt_val[i].checked === true ){
                         optionvalues.push(opt_val[i].value); 
-                        questionvalues.push('32'); 
+                        questionvalues.push('46'); 
                     }
                 }
                 x[opt_id]={
@@ -430,11 +430,11 @@
             a['agent_select']=$('#agent_select').val();
             a['agentselect']=$('#agentselect').val();  
             a['offer_id']=$('#offer_id').val(); 
-            if($('input[name="delsource"]:checked').val() =='direct'){
-                a['delsource']='direct';
-            }else{
-                a['delsource']='fenq';
-            }
+            // if($('input[name="delsource"]:checked').val() =='direct'){
+            //     a['delsource']='direct';
+            // }else{
+            //     a['delsource']='fenq';
+            // }
             a['bucket']=$('#bucket').val();  
             a['deletedreasonselect']=$('#deletedreasonselect').val();
             a['deletedcall_noncall']=$('#deletedcall_noncall').val();
