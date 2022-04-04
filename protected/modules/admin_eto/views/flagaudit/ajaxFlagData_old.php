@@ -1,6 +1,4 @@
-<?php
-    $flagged_reason = "Call Back later";
-?>
+
 <br>
 <table style="border-collapse: collapse;" border="0" bordercolor="#bedaff" cellpadding="4" cellspacing="0" width="100%">
     <?php 
@@ -45,7 +43,7 @@
             </td>
             <td style="padding:4px;">
                 <b>Call Recording:</b>
-                &nbsp;<?= $viewData['CALL_RECORDING_URL'];?>
+                &nbsp;<?= $viewData['$CALL_RECORDING_URL'];?>
             </td>
             <td style="padding:4px;">
                 <a href="index.php?r=admin_eto/OfferDetail/multiplecallrecord&offer=<?= $offerID;?>&mid=3424" target="_blank">&#187;&nbsp;View All Recordings</a>
@@ -88,7 +86,7 @@
         <tr>
             <td style="padding:4px;">
                 <b>Flagged Reason: </b>
-                &nbsp;<?= $flagged_reason?>
+                &nbsp;Call Back Later
             </td>
             <td>
                 <input type="radio" <?= $checkradio2?> onclick = "validate_radio(this.name)" name="<?= 'delopt_' . $offerID;?>" id="<?= 'delopt_' . $offerID;?>" value="2" ><font color="red">&nbsp;Wrongly Flagged</font>

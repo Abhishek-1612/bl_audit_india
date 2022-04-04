@@ -3,6 +3,7 @@ class Globalconnection extends CFormModel {
     public $host_name;
     function __construct() {
         $this->host_name = $_SERVER['SERVER_NAME'];
+
     }
     public function connect_db_yii($db_name, $data = array()) //USE
     {
@@ -15,8 +16,7 @@ class Globalconnection extends CFormModel {
             try {
                 $dbh = $this->make_db_yii($db_name);
                 return $dbh;
-            }
-            catch(Exception $e) {
+            }catch(Exception $e) {
             }
     }
     private function make_db_yii($db_name) {

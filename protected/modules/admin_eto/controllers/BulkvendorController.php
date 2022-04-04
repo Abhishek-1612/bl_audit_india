@@ -26,7 +26,6 @@ class BulkvendorController extends Controller
                 $model = new BulkvendorForm();
 
                 $process_time =  date("F j, Y, g:i a");
-
                 $domain_serv = isset($_SERVER['UTILS_URL']) && $_SERVER['UTILS_URL'] !='' ? $_SERVER['UTILS_URL'] : ''; 
                 $pass_file         = isset($_REQUEST['excel']) ? $_REQUEST['excel'] : '';
 

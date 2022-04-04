@@ -246,7 +246,7 @@ class BulkAuditModel extends CFormModel
             }
             // end 1/2 sample per associate
                           
-            $sql = "SELECT * FROM (
+            $sql           = "SELECT * FROM (
           SELECT 
                      FENQ_CALL_RECORDING_URL CALL_RECORDING_URL,FK_GLUSR_USR_ID,DIR_QUERY_FREE_REFID ETO_OFR_DISPLAY_ID,NULL ETO_OFR_TITLE,TO_CHAR(ETO_OFR_FENQ_DATE,'DD-Mon-YYYY') ETO_OFR_APPROV_DATE,
                      QUERY_MODID FK_GL_MODULE_ID,ETO_LEAP_VENDOR_NAME,ETO_LEAP_EMP_NAME,ETO_LEAP_EMP_ID,COALESCE(FENQ_CALL_DEL_REASON,FENQ_DEL_REASON) FK_ETO_OFR_DEL_REASON_CODE,
@@ -282,7 +282,7 @@ class BulkAuditModel extends CFormModel
             if($counter < 20 && $counter<$maxrecords){  
                         if(($sample_per_associate == '1') && ($prev_empid==$rec['ETO_LEAP_EMP_ID'])) {
                         }else{
-                            $counter++;
+                        $counter++;
                         if (isset($rec['FK_ETO_OFR_DEL_REASON_CODE'])) {
                             $deletedReason = isset($deletedreasonArr[$rec['FK_ETO_OFR_DEL_REASON_CODE']]) ? $deletedreasonArr[$rec['FK_ETO_OFR_DEL_REASON_CODE']] : '';
                         } else {
@@ -296,7 +296,36 @@ class BulkAuditModel extends CFormModel
                 break;
             } 
         } 
-        
+        $sampleArr = array(
+
+            array(
+                  'CALL_RECORDING_URL' => 'http://112.133.194.234:8082/monitor/20220321/IN-2010-08069043046-20220321-183028-1647867628.313600.WAV',
+                  'FK_GLUSR_USR_ID' => '66590605',
+                  'ETO_OFR_DISPLAY_ID' => '66590605',
+                  'ETO_OFR_TITLE' => 'Kisan Card',
+                  'ETO_OFR_APPROV_DATE' => '21-Mar-2022',
+                  'FK_GL_MODULE_ID' => 'FLPNS',
+                  'ETO_LEAP_VENDOR_NAME' => 'VKALPINTENT',
+                  'ETO_LEAP_EMP_NAME' => 'Rashmi Chouhan',
+                  'DELETEDREASON' => 'test',
+                   'ETO_LEAP_EMP_ID' => '87918',
+                     'LEAD_TYPE' => ''
+      
+              ),
+         array(
+                       'CALL_RECORDING_URL' => '',
+                  'FK_GLUSR_USR_ID' => '116413113',
+                  'ETO_OFR_DISPLAY_ID' => '73215676959',
+                  'ETO_OFR_TITLE' => 'TENNIS',
+                  'ETO_OFR_APPROV_DATE' => '21-Mar-2022',
+                  'FK_GL_MODULE_ID' => 'ANDROID',
+                  'ETO_LEAP_VENDOR_NAME' => 'COMPETENTDNC',
+                  'ETO_LEAP_EMP_NAME' => 'Sukhwinder Kumar',
+                  'DELETEDREASON' => 'test',
+                   'ETO_LEAP_EMP_ID' => '80558',
+                     'LEAD_TYPE' => ''
+              ),
+          );
         return $sampleArr; 
     }
     public function printsample($dataArr)
@@ -341,13 +370,24 @@ class BulkAuditModel extends CFormModel
                                     <td><input onclick = "validate_opt(this.name)"  type="checkbox" '.$check3.' width="100px" value="230" name="chk_' . $offerID . '" id="chk_230_' . $offerID . '">
                                         <font color="red">Phone Etiquette Error</font>
                                         </td></tr>
+
+                                        
+                                        <tr>
+                                        <td><input onclick = "validate_opt(this.name)"  type="checkbox" '.$check1.' width="100px" value="228" name="chk_' . $offerID . '" id="chk_228_' . $offerID . '">
+                                        <font color="red">Can be Approved</font></td>
+                                        <td><input onclick = "validate_opt(this.name)"  type="checkbox" '.$check3.' width="100px" value="230" name="chk_' . $offerID . '" id="chk_230_' . $offerID . '">
+                                        <font color="red">Can be Flagged</font>
+                                        </td></tr>
+
+
+
                                         <tr><td><input onclick = "validate_opt(this.name)"  type="checkbox" '.$check2.' width="100px" value="229" name="chk_' . $offerID . '" id="chk_229_' . $offerID . '">
-                                        <font color="red">Wrong Deletion</font></td>
-                                        <td><input onclick = "validate_opt(this.name)"  type="checkbox" '.$check4.' width="100px" value="231"' . $offerID . '" name="chk_' . $offerID . '" id="chk_231_' . $offerID . '">
-                                        <font color="red">Others</font></td></tr>
+                                        
+                                       
+                                        <font color="red">Others/Tech Issue</font></td></tr>
                                         </table></td></tr>
                                      <tr>
-                                     <td style="padding:4px;"><b>Deletion Reason: </b>&nbsp;' . $dataArr[$i]['deletedreason'] . '</td>
+                                     <td style="padding:4px;"><b>Deletion Reason: </b>&nbsp;' . @$dataArr[$i]['deletedreason'] . '</td>
                                      <td><input type="radio" '.$checkradio2.' onclick = "validate_radio(this.name)" name="delopt_' . $offerID . '" id="delopt_' . $offerID . '" value="2" ><font color="red">&nbsp;Error Found</font></td>
                                      </tr><tr>
                                      <td style="padding:4px;"><b>User Stats: </b>&nbsp;<input type="button" name="showuserstat_' . $offerID . '" id="showuserstat_' . $offerID . '" value="Show" onclick="showuserstats(' . $offerID . ',' . $glid . ')"><div style="font-size:12px;padding:8px 15px 8px 8px; line-height:23px;letter-spacing:-0.02em;font-weight:bold" id="userstat_' . $offerID . '"></div>
@@ -418,6 +458,7 @@ class BulkAuditModel extends CFormModel
     
     public function auditDump_mis($postgre, $start_date, $end_date, $action, $vendor_approve, $vendor_audit, $auditId, $AssociateId ,$deleted_by)
     {
+        
         $emp_id = Yii::app()->session['empid'];
         $strt1        = strtotime($start_date);
         $end1         = strtotime($end_date);
@@ -851,8 +892,9 @@ ORDER  BY BL_AUDIT_RESPONSE_ID,
                     $d2_file=preg_replace('/[^A-Za-z0-9\-,+\(\):]/', ' ', $d1_file);
                     $d3_file=preg_replace('/,\s/', "", $d2_file);
                     fwrite($filename,"$d3_file\t\n");                
-                    $i++;
+                $i++;
             }
+
             fclose($filename);
             $this->export($filename_out);
            }else{
@@ -1034,6 +1076,7 @@ ORDER  BY BL_AUDIT_RESPONSE_ID,
                 $cond $cond2 $poolcond union all SELECT ETO_LEAP_EMP_ID, ETO_OFR_DISPLAY_ID FROM ETO_OFR_TEMP_DEL_ARCH, ETO_LEAP_MIS_INTERIM  "
                . "WHERE ETO_OFR_DELETEDBYID = ETO_LEAP_EMP_ID $cond_sample_type $cond $cond2 $poolcond ) A group by ETO_LEAP_EMP_ID "
                . "having count(ETO_OFR_DISPLAY_ID) >=1 order by count(ETO_OFR_DISPLAY_ID) desc";
+           
       }else{
           $sql_page="SELECT count(ETO_OFR_DISPLAY_ID) cnt,substring (string_agg(ETO_OFR_DISPLAY_ID::text, ','),0,24) OFR_LIST,ETO_LEAP_EMP_ID, COUNT(1) OVER()TOTALCNT 
                 FROM (

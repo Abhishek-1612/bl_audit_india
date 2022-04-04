@@ -19,11 +19,13 @@ border-size:2px;border-style:solid;border-color:#0195d3;
 a:visited {color: red;}
 a:active {color: blue;}
 a:link {color: blue;}
-</style>
-
-<LINK HREF="/css/report.css" REL="STYLESHEET" TYPE="text/css">       
-<script language="javascript" type="text/javascript" src="<?php echo$utilsHost?>/js/jquery.min.js"></script>
-<script language="javascript" src="/js/calendar.js"></script>
+</style>     
+<link href="/gladmin/css/report.css" rel="stylesheet" type="text/css">
+<script language="javascript" type="text/javascript" src="/gladmin/js/jquery.min.js"></script>
+<script language="javascript" src="/gladmin/js/calendar.js"></script>
+<!-- <link href="/css/report.css" rel="stylesheet" type="text/css">
+<script language="javascript" type="text/javascript" src="<?php //echo$utilsHost?>/js/jquery.min.js"></script>
+<script language="javascript" src="/js/calendar.js"></script> -->
 <?php
 if ($tabselect <> 1) {
 ?>
@@ -805,7 +807,7 @@ if (1) { //tabselect condition
 ?>
     <body>
      <div id="complete_mis">
-     <form name="searchForm" id="searchForm" method="post" action="/index.php?r=admin_eto/BulkAuditEto/AuditMis&mid=3549" style="margin-top:0;margin-bottom:0;" onsubmit="return checkvalidate();">
+     <form name="searchForm" id="searchForm" method="post" action="./index.php?r=admin_eto/BulkAuditEto/AuditMis&mid=3549" style="margin-top:0;margin-bottom:0;" onsubmit="return checkvalidate();">
             <table style="border-collapse: collapse;" border="1" bordercolor="#bedaff" cellpadding="4" cellspacing="0" width="100%">
               <TR>
               <td bgcolor="#dff8ff" colspan="4" align="center"><font COLOR =" #333399"><b>Audit MIS</b></font>(<font COLOR ="red"> *This Audit Search works for Vendor 7 Days otherwise 2 Date Range Only</font>)             
@@ -1085,6 +1087,8 @@ if (1) { //tabselect condition
             $tot_records                   = count($dataArr);
             $wrong_del_dis_selection_error = 0;
             $wrong_del_error               = 0;
+            $can_be_approved               = 0;
+            $can_be_flagged                = 0;
             $call_ettiquettes              = 0;
             $error_score                   = 0;
             
@@ -1172,8 +1176,8 @@ if (1) { //tabselect condition
                 echo '<table  border="1" cellpadding="0" cellspacing="1" width="100%" align="center">';
                 echo '<tr style="background: #0195d3; color: white;">
                 <td colspan="7" align="center" style="padding:4px;"><b>Quality Score Summary</b></td></tr>
-                   <tr style="background: #dff8ff; color: white;"><td style="padding:4px;font-weight:bold;">Total Audits</td>' . '<td align="center" style="padding:4px;font-weight:bold;">Wrong Deletion Disposition Selection Error</td>' . '<td align="center" style="padding:4px;font-weight:bold;">Wrong Deletion Error</td>' . '<td align="center" style="padding:4px;font-weight:bold;">Call Etiquettes</td>' . '<td align="center" style="padding:4px;font-weight:bold;">Error Score</td>' . '</tr>';
-                echo '<tr><td align="center" style="padding:4px;">' . $totalaudit . '</td>' . '<td align="center" style="padding:4px;">' . $wrong_del_dis_selection_error . '</td>' . '<td align="center" style="padding:4px;">' . $wrong_del_error . '</td>' . '<td align="center" style="padding:4px;">' . $call_ettiquettes . '</td>' . '<td align="center" style="padding:4px;">' . $error_score . '</td>' . '</tr>';
+                   <tr style="background: #dff8ff; color: white;"><td style="padding:4px;font-weight:bold;">Total Audits</td>' . '<td align="center" style="padding:4px;font-weight:bold;">Wrong Deletion Disposition Selection Error</td>' . '<td align="center" style="padding:4px;font-weight:bold;">Can be Approved Error</td>'. '<td align="center" style="padding:4px;font-weight:bold;">Can be Flagged Error</td>' . '<td align="center" style="padding:4px;font-weight:bold;">Call Etiquettes</td>' . '<td align="center" style="padding:4px;font-weight:bold;">Error Score</td>' . '</tr>';
+                echo '<tr><td align="center" style="padding:4px;">' . $totalaudit . '</td>' . '<td align="center" style="padding:4px;">' . $wrong_del_dis_selection_error . '</td>' . '<td align="center" style="padding:4px;">' . $can_be_approved . '</td>' . '<td align="center" style="padding:4px;">' . $can_be_flagged . '</td>' . '<td align="center" style="padding:4px;">' . $call_ettiquettes . '</td>' . '<td align="center" style="padding:4px;">' . $error_score . '</td>' . '</tr>';
                 echo '<tr><td align="center" style="padding:4px;">%</td>' . '<td align="center" style="padding:4px;">' . round((($wrong_del_dis_selection_error / $totalaudit) * 100), 2) . '</td>' . '<td align="center" style="padding:4px;">' . round((($wrong_del_error / $totalaudit) * 100), 2) . '</td>' . '<td align="center" style="padding:4px;">' . round((($call_ettiquettes / $totalaudit) * 100), 2) . '</td>' . '<td align="center" style="padding:4px;">' . round((($error_score / $totalaudit) * 100), 2) . '</td>' . '</tr>';
                 echo '</table>';
                 echo '<br><br><table  border="1" cellpadding="0" cellspacing="1" width="100%" align="center"><tr><td colspan="30" align="center"><span style="padding:4px;font-weight:bold;text-align:center;">Total ' . (count($dataArr) - 1) . ' Records Found</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" style="display:none;" name="export_dump" id="export_dump" value="Export Dump"></td></tr></table><div style="width:100%;" >' . $html . '</div>';

@@ -31,7 +31,6 @@
         $pool=isset($_REQUEST['pool']) ? $_REQUEST['pool'] : array();
         $search=isset($_REQUEST['stype']) ? $_REQUEST['stype'] : '';
         $stype=isset($_REQUEST['stype'])?$_REQUEST['stype']:'';
-        // echo $start_date;die('works');
         $start_date1=isset($start_date)?$start_date:'';
 //         $deletedreasonArr=array(
 //             1=>'Duplicate Requirement',
@@ -62,7 +61,7 @@
 //             26=>'Language Barrier'
 //         );
     ?>
-    <form name="sampleForm" id="sampleForm" method="post" action="/index.php?r=admin_eto/FlagauditEto/Sampling&mid=3794" style="margin-top:0;margin-bottom:0;">
+    <form name="sampleForm" id="sampleForm" method="post" action="/index.php?r=admin_eto/bulkauditEto/Sampling&mid=3794" style="margin-top:0;margin-bottom:0;">
         <table style="border-collapse: collapse;" border="1" class="flatTable" bordercolor="#bedaff" cellpadding="4" cellspacing="0" width="100%">
             <tr>
                 <td bgcolor="#dff8ff" colspan="4" align="center"><font color =" #333399"><b>Sample Data </b></font></td>
@@ -79,9 +78,9 @@
                 </td>
                 <td  CLASS="admintext">
                     <span id="deletedreason" name="deletedreason">
-                        &nbsp;Direct&nbsp;&nbsp;<input type="radio" name="delsource" value="direct" id="delsource" checked>
+                        <!-- &nbsp;Direct&nbsp;&nbsp;<input type="radio" name="delsource" value="direct" id="delsource" checked>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fenq&nbsp;&nbsp;<input type="radio" name="delsource" value="fenq" id="delsource">
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp; -->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <select name="deletedcall_noncall" id="deletedcall_noncall">
                             <option value="0">ALL</option>
                             <option value="1">With Call</option>
@@ -250,14 +249,14 @@
         a['agent_select']=$('#agent_select').val();
         a['agentselect']=$('#agentselect').val();
         a['offer_id']=$('#offer_id').val();
-        if($('input[name="delsource"]:checked').val() =='direct')
-        {
-            a['delsource']='direct';
-        }
-        else
-        {
-            a['delsource']='fenq';
-        }
+        // if($('input[name="delsource"]:checked').val() =='direct')
+        // {
+        //     a['delsource']='direct';
+        // }
+        // else
+        // {
+        //     a['delsource']='fenq';
+        // }
         a['bucket']=$('#bucket').val();
         a['deletedreasonselect']=$('#deletedreasonselect').val();
         a['deletedcall_noncall']=$('#deletedcall_noncall').val();
@@ -432,11 +431,11 @@
             a['agent_select']=$('#agent_select').val();
             a['agentselect']=$('#agentselect').val();
             a['offer_id']=$('#offer_id').val();
-            if($('input[name="delsource"]:checked').val() =='direct'){
-                a['delsource']='direct';
-            }else{
-                a['delsource']='fenq';
-            }
+            // if($('input[name="delsource"]:checked').val() =='direct'){
+            //     a['delsource']='direct';
+            // }else{
+            //     a['delsource']='fenq';
+            // }
             a['bucket']=$('#bucket').val();
             a['deletedreasonselect']=$('#deletedreasonselect').val();
             a['deletedcall_noncall']=$('#deletedcall_noncall').val();
