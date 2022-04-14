@@ -1,5 +1,5 @@
 <?php 
-// $_SERVER['SERVER_NAME'] = 'gladmin.intermesh.net';
+$_SERVER['SERVER_NAME'] = 'gladmin.intermesh.net';
 class BulkAuditEtoController extends Controller
 {
         
@@ -168,14 +168,15 @@ class BulkAuditEtoController extends Controller
                 }
                 if(isset($_REQUEST['export_dump']) && $interval <=$noofdays)
                 {
-                $action="exportEXL";
-                $dataArr=$obj->auditDump_mis(0,$start_date,$end_date,$action,$vendor_approve,$vendor_audit,$auditId,$AssociateId,$deleted_by); 
-                exit;
+                        $action="exportEXL";
+                        $dataArr=$obj->auditDump_mis(0,$start_date,$end_date,$action,$vendor_approve,$vendor_audit,$auditId,$AssociateId,$deleted_by); 
+                        exit;
                 }elseif(isset($_REQUEST['submit_dump']) && $interval <=$noofdays)
                 {
-                $action="submit_dump";
-                $dataArr=$obj->auditDump_mis(0,$start_date,$end_date,$action,$vendor_approve,$vendor_audit,$auditId,$AssociateId,$deleted_by); 
+                        $action="submit_dump";
+                        $dataArr=$obj->auditDump_mis(0,$start_date,$end_date,$action,$vendor_approve,$vendor_audit,$auditId,$AssociateId,$deleted_by); 
                 }
+                // echo "<pre>";print_r($dataArr);die;
 
                 $this->render('/bulkaudit/AuditMis',array('dataArr'=>$dataArr,'start_date'=>$start_date,'end_date'=>$end_date,'vendorArr'=>$vendorArr,'vendor_approve'=>$vendor_approve,'vendor_approval'=>$vendor_approval, 'vendor_audit'=>$vendor_audit,'interval'=>$interval,'deleted_by'=>$deleted_by,'permision'=>$permision));   
         }
@@ -184,18 +185,20 @@ class BulkAuditEtoController extends Controller
                 $empId = Yii::app()->session['empid'];
 		$mid =isset($_REQUEST["mid"]) ? $_REQUEST["mid"] : '';
                 $tljson='';
+                $empId = 12345; //Testing
                 if(!$empId)
 		{
 			print "You are not logged in";
                         exit;
 		}
-                $user_permissions=GL_LoginValidation::CheckModulePermission($mid, $empId);
+                // $user_permissions=GL_LoginValidation::CheckModulePermission($mid, $empId);
 		if(empty($user_permissions))
 		{
-		$user_permissions['TOVIEW'] = $user_permissions['TOEDIT']=$user_permissions['TOADD'] =$user_permissions['TODELETE']='';
+		        $user_permissions['TOVIEW'] = $user_permissions['TOEDIT']=$user_permissions['TOADD'] =$user_permissions['TODELETE']='';
 		}		
 		$user_view = isset($user_permissions['TOVIEW']) ? $user_permissions['TOVIEW'] : '';  
-		if($user_view ==1)
+		$user_view = 1; //Testing
+                if($user_view ==1)
 		{                
                         $currentDate = date("d-m-Y");
                         $request = Yii::app()->request;

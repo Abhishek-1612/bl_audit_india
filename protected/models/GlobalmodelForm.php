@@ -4191,7 +4191,7 @@ class GlobalmodelForm extends CFormModel {
         return $mid_name;
     }
     public function runSelect($file_name, $lineno, $class, $dbh, $st, $aa) { //userapproval
-        // echo "<pre>";echo "<hr>"; echo $st; echo "<hr>";
+        echo "<pre>";echo "<hr>"; echo $st; echo "<hr>";
         $sth_sql = '';
         $ha = '';
         $message = "\n\n\n";

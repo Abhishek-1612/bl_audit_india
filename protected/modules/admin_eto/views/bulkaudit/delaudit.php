@@ -322,6 +322,10 @@ function validate_opt(grpname){
             radioname=grpname.replace("chk", "delopt");
             $('input:radio[name=\''+radioname+'\'][value="2"]').attr('checked',true);           
         }
+        if (group[4].checked === true) {
+            radioname=grpname.replace("chk", "delopt");
+            $('input:radio[name=\''+radioname+'\'][value="2"]').attr('checked',true);           
+        }
 }
 function validate_radio(radioname){
         grpname=radioname.replace("delopt", "chk");
@@ -336,7 +340,7 @@ function validate_radio(radioname){
 }
 
 function check_validate(){
-                         var a ={};
+                        var a ={};
                         var x={};
                         var ids = document.getElementById("all_ofr_id").value.split(",");
               
@@ -441,7 +445,8 @@ function check_validate(){
             }else{
                 $("#trmain").hide();                
             } 
-                $('#submit_view').click(function(){                
+                $('#submit_view').click(function(){          
+                    // alert();      
                         a={};
                         a['stype']= $("input[name='stype']:checked"). val();
                         a['vendor_approval']=$('#vendor_approval').val();

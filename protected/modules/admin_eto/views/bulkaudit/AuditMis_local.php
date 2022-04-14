@@ -1,4 +1,3 @@
-
 <?php
 $team_leader    = isset($_REQUEST['team_leader_select']) ? $_REQUEST['team_leader_select'] : 'ALL';
 $team_qa        = isset($_REQUEST['qa_select']) ? $_REQUEST['qa_select'] : 'ALL';
@@ -19,10 +18,13 @@ border-size:2px;border-style:solid;border-color:#0195d3;
 }
 a:visited {color: red;}
 a:active {color: blue;}
-a:link {color: blue;} 
-</style>	
-<LINK HREF="/css/report.css" REL="STYLESHEET" TYPE="text/css">       	
-<script language="javascript" type="text/javascript" src="<?php echo$utilsHost?>/js/jquery.min.js"></script>
+a:link {color: blue;}
+</style>     
+<!-- <link href="/gladmin/css/report.css" rel="stylesheet" type="text/css">
+<script language="javascript" type="text/javascript" src="/gladmin/js/jquery.min.js"></script>
+<script language="javascript" src="/gladmin/js/calendar.js"></script> -->
+<link href="/css/report.css" rel="stylesheet" type="text/css">
+<script language="javascript" type="text/javascript" src="<?php //echo$utilsHost?>/js/jquery.min.js"></script>
 <script language="javascript" src="/js/calendar.js"></script>
 <?php
 if ($tabselect <> 1) {
@@ -999,7 +1001,6 @@ if (1) { //tabselect condition
             echo "<OPTION VALUE=\"DDN\">DDN</OPTION>";
         }
     }
-
     echo '</select>';
 ?>
    </td></tr>
@@ -1129,7 +1130,7 @@ if (1) { //tabselect condition
                                       <td style="padding:4px;">' . @$dataArr[$i][1] . '</td>
                                     <td style="padding:4px;width:100px;">' . @$dataArr[$i][2] . '</td>
                                       <td style="padding:4px;">
-                                      <a href="/index.php?r=admin_eto/BulkAuditEto/AuditMis_Edit&offer_id=' . @$dataArr[$i][4] . '&auditid='.@$dataArr[$i][3].'&mid=3549" style="text-decoration:none;color:#0000ff" target="_blank">' . @$dataArr[$i][3] . '</a>';
+                                      <a href="./index.php?r=admin_eto/BulkAuditEto/AuditMis_Edit&offer_id=' . @$dataArr[$i][4] . '&auditid='.@$dataArr[$i][3].'&mid=3549" style="text-decoration:none;color:#0000ff" target="_blank">' . @$dataArr[$i][3] . '</a>';
                         if ($permision == 4 && (preg_match("/DDN/", @$dataArr[$i][1]) == 0 && preg_match("/NOIDA/", @$dataArr[$i][1]) == 0)) {
                             $html .= '<br/><br/><div><a href="#" onclick="javascript:window.open(\'/index.php?r=admin_eto/auditEto/Index&tabselect=7&reaudit=1&offerID=' . @$dataArr[$i][4] . '\',\'_blank\',\'scrollbars=1,width=900, height=800\');" style="text-decoration:none;color:#0000ff"><font color="red">Re-Audit</font></a></div>';
                         }
@@ -1148,7 +1149,7 @@ if (1) { //tabselect condition
                                       <td style="padding:4px;">' . @$dataArr[$i][14] . '</td>'
                                     . '<td style="padding:4px;">' . @$dataArr[$i][15] . '</td>';
                         
-                        if (@$dataArr[$i][16] == 'No') {
+                        if (@$dataArr[$i][15] == 'No') {
                             $html .= '<td style="padding:4px;position:relative;"><span id="Rebuttal_div' . $i . '"><input type="button" name="Raise_Rebuttal" id="Raise_Rebuttal" value="Raise Rebuttal" onclick="showCmplntForm(' . @$dataArr[$i][3] . ',' . @$dataArr[$i][4] . ',' . $i . ',' . $tot_records . ')"></span>
                                        <span id="cmplnt_div' . $i . '" class="cancel" style="display:none;" ></span>
                                       </td>';

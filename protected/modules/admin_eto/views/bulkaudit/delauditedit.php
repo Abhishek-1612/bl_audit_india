@@ -240,8 +240,13 @@ if ($tot_records > 0) {
     if(isset($auditdet) ){
     foreach($auditdet as $d){
        
-        if($d['OPT'] == 'Wrong Deletion'){
+        if($d['OPT'] == 'Can be Approved'){
             $check2 = " checked";
+            $checkradio1 = "";
+            $checkradio2 = "checked";
+        }
+        if($d['OPT'] == 'Can be Flagged'){
+            $check5 = " checked";
             $checkradio1 = "";
             $checkradio2 = "checked";
         }
@@ -300,8 +305,10 @@ if ($tot_records > 0) {
                                 <font color="red">Phone Etiquette Error</font>
                                 </td></tr>
                                 <tr><td><input onclick = "validate_opt(this.name)"  type="checkbox" '.$check2.' width="100px" value="229" name="chk_' . $offerID . '" id="chk_229_' . $offerID . '">
-                                <font color="red">Wrong Deletion</font></td>
-                                <td><input onclick = "validate_opt(this.name)"  type="checkbox" '.$check4.' width="100px" value="231"' . $offerID . '" name="chk_' . $offerID . '" id="chk_231_' . $offerID . '">
+                                <font color="red">Can be Approved</font></td>
+                                <td><input onclick = "validate_opt(this.name)"  type="checkbox" '.$check5.' width="100px" value="229" name="chk_' . $offerID . '" id="chk_301_' . $offerID . '">
+                                <font color="red">Can be Flagged</font></td></tr>
+                                <tr><td><input onclick = "validate_opt(this.name)"  type="checkbox" '.$check4.' width="100px" value="231"' . $offerID . '" name="chk_' . $offerID . '" id="chk_231_' . $offerID . '">
                                 <font color="red">Others</font></td></tr>
                                 </table></td></tr>
                              <tr>

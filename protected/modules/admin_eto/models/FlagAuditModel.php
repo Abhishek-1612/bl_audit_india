@@ -467,16 +467,19 @@ class FlagAuditModel extends CFormModel
                 $cond2 .= " AND ETO_OFR_DISPLAY_ID IN($ofrlist) ";
             }
             // end 1/2 sample per associate
-            $sql="select * from (SELECT LEAP_CALL_RECORDING_URL  CALL_RECORDING_URL,LEAP_ACTIVITY_STATS.FK_ETO_OFR_DISPLAY_ID,
+    //         $sql="select * from (SELECT LEAP_CALL_RECORDING_URL  CALL_RECORDING_URL,a.FK_ETO_OFR_DISPLAY_ID,
+	// TO_CHAR(activity_time,'DD-Mon-YYYY') ETO_OFR_APPROV_DATE, ETO_LEAP_VENDOR_NAME,ETO_LEAP_EMP_NAME,
+	// ETO_LEAP_EMP_ID FROM LEAP_ACTIVITY_STATS a, ETO_LEAP_MIS_INTERIM,LEAP_CALL_RECORDING WHERE fk_employee_id = ETO_LEAP_EMP_ID $cond_sample_type $cond $cond2 $poolcond
+	// union all
+	// SELECT LEAP_CALL_RECORDING_URL  CALL_RECORDING_URL,
+	// LEAP_ACTIVITY_STATS_arch.FK_ETO_OFR_DISPLAY_ID,TO_CHAR(activity_time,'DD-Mon-YYYY') ETO_OFR_APPROV_DATE, ETO_LEAP_VENDOR_NAME,
+	// ETO_LEAP_EMP_NAME,ETO_LEAP_EMP_ID
+	// FROM LEAP_ACTIVITY_STATS_arch, ETO_LEAP_MIS_INTERIM,LEAP_CALL_RECORDING
+	// WHERE fk_employee_id = ETO_LEAP_EMP_ID
+	// $cond_sample_type $cond $cond2 $poolcond )A $random_order_cond $limitcond";
+    $sql="select * from (SELECT LEAP_CALL_RECORDING_URL  CALL_RECORDING_URL,a.FK_ETO_OFR_DISPLAY_ID,
 	TO_CHAR(activity_time,'DD-Mon-YYYY') ETO_OFR_APPROV_DATE, ETO_LEAP_VENDOR_NAME,ETO_LEAP_EMP_NAME,
-	ETO_LEAP_EMP_ID FROM LEAP_ACTIVITY_STATS, ETO_LEAP_MIS_INTERIM,LEAP_CALL_RECORDING WHERE fk_employee_id = ETO_LEAP_EMP_ID $cond_sample_type $cond $cond2 $poolcond
-	union all
-	SELECT LEAP_CALL_RECORDING_URL  CALL_RECORDING_URL,
-	LEAP_ACTIVITY_STATS_arch.FK_ETO_OFR_DISPLAY_ID,TO_CHAR(activity_time,'DD-Mon-YYYY') ETO_OFR_APPROV_DATE, ETO_LEAP_VENDOR_NAME,
-	ETO_LEAP_EMP_NAME,ETO_LEAP_EMP_ID
-	FROM LEAP_ACTIVITY_STATS_arch, ETO_LEAP_MIS_INTERIM,LEAP_CALL_RECORDING
-	WHERE fk_employee_id = ETO_LEAP_EMP_ID
-	$cond_sample_type $cond $cond2 $poolcond )A $random_order_cond $limitcond";
+	ETO_LEAP_EMP_ID FROM LEAP_ACTIVITY_STATS a, ETO_LEAP_MIS_INTERIM,LEAP_CALL_RECORDING WHERE fk_employee_id = ETO_LEAP_EMP_ID and FK_ETO_LEAP_EMP_ID = ETO_LEAP_EMP_ID $cond_sample_type $cond $cond2 $poolcond ) A";
         }else {
                 if($start_date<>'' ){
                     $cond .= " and date(activity_time) = TO_DATE('$start_date','DD-MON-YYYY') ";
@@ -577,12 +580,12 @@ class FlagAuditModel extends CFormModel
             'FK_GL_MODULE_ID' => 'FLPNS',
             'ETO_LEAP_VENDOR_NAME' => 'VKALPINTENT',
             'ETO_LEAP_EMP_NAME' => 'Rashmi Chouhan',
-             'ETO_LEAP_EMP_ID' => '87918',
-               'LEAD_TYPE' => ''
+            'ETO_LEAP_EMP_ID' => '87918',
+            'LEAD_TYPE' => ''
 
         ),
-   array(
-                 'CALL_RECORDING_URL' => '',
+        array(
+            'CALL_RECORDING_URL' => '',
             'FK_GLUSR_USR_ID' => '116413113',
             'ETO_OFR_DISPLAY_ID' => '73215676959',
             'ETO_OFR_TITLE' => 'TENNIS',
@@ -590,8 +593,8 @@ class FlagAuditModel extends CFormModel
             'FK_GL_MODULE_ID' => 'ANDROID',
             'ETO_LEAP_VENDOR_NAME' => 'COMPETENTDNC',
             'ETO_LEAP_EMP_NAME' => 'Sukhwinder Kumar',
-             'ETO_LEAP_EMP_ID' => '80558',
-               'LEAD_TYPE' => ''
+            'ETO_LEAP_EMP_ID' => '80558',
+            'LEAD_TYPE' => ''
         ),
     );
 

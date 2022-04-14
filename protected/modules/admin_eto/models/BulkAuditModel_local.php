@@ -1,10 +1,8 @@
-
 <?php
 class BulkAuditModel extends CFormModel
 {
     public function auditSample($empId, $start_date, $end_date, $maxrecords, $vendor_approval, $agentid, $bucket, $action, $vendorArr,$source)
-    {  
-
+    {    
         $poolname = isset($_REQUEST['pool']) ? $_REQUEST['pool'] : '';
         $poolval  = isset($_REQUEST['poolVal']) ? $_REQUEST['poolVal'] : '';
         $sample_type  = isset($_REQUEST['sample_type']) ? $_REQUEST['sample_type'] : 0;
@@ -136,11 +134,7 @@ class BulkAuditModel extends CFormModel
             $cond .= " AND ETO_OFR_DISPLAY_TYPE=11 ";
         }
         $sampleArr = array();
-        if (isset($_SERVER['SERVER_NAME']) && ($_SERVER['SERVER_NAME'] == 'dev-gladmin.intermesh.net') || ($_SERVER['SERVER_NAME'] == 'stg-gladmin.intermesh.net')) {
-            $dbh = $obj->connect_db_yii('postgress_web77v');
-        } else {
-            $dbh = $obj->connect_db_yii('postgress_web68v');
-        } 
+        $dbh = $obj->connect_db_yii('postgress_web68v');  
         if ($flag != '') {
             $flag = ltrim($flag, ",");
             $poolcond .= " AND COALESCE(USER_IDENTIFIER_FLAG,0) IN ($flag)";
@@ -203,7 +197,7 @@ class BulkAuditModel extends CFormModel
 	ETO_LEAP_EMP_NAME,ETO_LEAP_EMP_ID,FK_ETO_OFR_DEL_REASON_CODE, 
 	(CASE WHEN ETO_ENQ_TYP IN (1,3,5) THEN 'Retail' ELSE 'Non Retail' END) || ' / ' || (CASE WHEN ETO_OFR_DISPLAY_TYPE=11 THEN 'Frequent' ELSE 
 	'Non Frequent' END) || (CASE WHEN USER_IDENTIFIER_FLAG =24 THEN ' / High AOV' END) LEAD_TYPE 
-	FROM ETO_OFR_TEMP_DEL_ARCH, ETO_LEAP_MIS_INTERIM
+	FROM ETO_OFR_TEMP_DEL_ARCH, ETO_LEAP_MIS_INTERIM 
 	WHERE ETO_OFR_DELETEDBYID = ETO_LEAP_EMP_ID 
 	$cond_sample_type                  
                 $cond
@@ -283,7 +277,6 @@ class BulkAuditModel extends CFormModel
         } 
         $sth                     = $model->runSelect(__FILE__, __LINE__, __CLASS__, $dbh, $sql, $bind);
             $prev_empid='';$counter=0;
-            if($sth){
           while ($rec1 = $sth->read()) {         
             $rec=array_change_key_case($rec1, CASE_UPPER);
             if($counter < 20 && $counter<$maxrecords){  
@@ -303,14 +296,70 @@ class BulkAuditModel extends CFormModel
                 break;
             } 
         } 
-    }
+        $sampleArr = array(
+
+
+
+
+            array(
+      
+                  'CALL_RECORDING_URL' => 'http://112.133.194.234:8082/monitor/20220321/IN-2010-08069043046-20220321-183028-1647867628.313600.WAV',
+      
+                  'FK_GLUSR_USR_ID' => '66590605',
+      
+                  'ETO_OFR_DISPLAY_ID' => '66590605',
+      
+                  'ETO_OFR_TITLE' => 'Kisan Card',
+      
+                  'ETO_OFR_APPROV_DATE' => '21-Mar-2022',
+      
+                  'FK_GL_MODULE_ID' => 'FLPNS',
+      
+                  'ETO_LEAP_VENDOR_NAME' => 'VKALPINTENT',
+      
+                  'ETO_LEAP_EMP_NAME' => 'Rashmi Chouhan',
+      
+                   'ETO_LEAP_EMP_ID' => '87918',
+      
+                     'LEAD_TYPE' => ''
+      
+      
+      
+      
+              ),
+      
+         array(
+      
+                       'CALL_RECORDING_URL' => '',
+      
+                  'FK_GLUSR_USR_ID' => '116413113',
+      
+                  'ETO_OFR_DISPLAY_ID' => '73215676959',
+      
+                  'ETO_OFR_TITLE' => 'TENNIS',
+      
+                  'ETO_OFR_APPROV_DATE' => '21-Mar-2022',
+      
+                  'FK_GL_MODULE_ID' => 'ANDROID',
+      
+                  'ETO_LEAP_VENDOR_NAME' => 'COMPETENTDNC',
+      
+                  'ETO_LEAP_EMP_NAME' => 'Sukhwinder Kumar',
+      
+                   'ETO_LEAP_EMP_ID' => '80558',
+      
+                     'LEAD_TYPE' => ''
+      
+              ),
+      
+          );
         return $sampleArr; 
     }
     public function printsample($dataArr)
     {
         $checkradio1 = "checked";
         $checkradio2 = "";
-        $check1 = $check2 =  $check3 =$check4=$check5= '';
+        $check1 = $check2 =  $check3 =$check4= '';
 
         $tot_records = count($dataArr);
         if ($tot_records > 0) {
@@ -347,14 +396,21 @@ class BulkAuditModel extends CFormModel
                                     <font color="red">Wrong Deletion Disposition Selection</font></td>
                                     <td><input onclick = "validate_opt(this.name)"  type="checkbox" '.$check3.' width="100px" value="230" name="chk_' . $offerID . '" id="chk_230_' . $offerID . '">
                                         <font color="red">Phone Etiquette Error</font>
-                                        </td></tr>                                        
+                                        </td></tr>
+
+                                        
                                         <tr>
-                                        <td><input onclick = "validate_opt(this.name)"  type="checkbox" '.$check2.' width="100px" value="304" name="chk_' . $offerID . '" id="chk_304_' . $offerID . '">
+                                        <td><input onclick = "validate_opt(this.name)"  type="checkbox" '.$check1.' width="100px" value="302" name="chk_' . $offerID . '" id="chk_228_' . $offerID . '">
                                         <font color="red">Can be Approved</font></td>
-                                        <td><input onclick = "validate_opt(this.name)"  type="checkbox" '.$check5.' width="100px" value="303" name="chk_' . $offerID . '" id="chk_303_' . $offerID . '">
+                                        <td><input onclick = "validate_opt(this.name)"  type="checkbox" '.$check3.' width="100px" value="301" name="chk_' . $offerID . '" id="chk_230_' . $offerID . '">
                                         <font color="red">Can be Flagged</font>
                                         </td></tr>
-                                        <tr><td><input onclick = "validate_opt(this.name)"  type="checkbox" '.$check4.' width="100px" value="231" name="chk_' . $offerID . '" id="chk_231_' . $offerID . '"> 
+
+
+
+                                        <tr><td><input onclick = "validate_opt(this.name)"  type="checkbox" '.$check2.' width="100px" value="229" name="chk_' . $offerID . '" id="chk_229_' . $offerID . '">
+                                        
+                                       
                                         <font color="red">Others/Tech Issue</font></td></tr>
                                         </table></td></tr>
                                      <tr>
@@ -378,7 +434,7 @@ class BulkAuditModel extends CFormModel
     }
     public function save_audit_details()
     {
-        $serv_model               = new ServiceGlobalModelForm();
+        // $serv_model               = new ServiceGlobalModelForm();
         $BL_AUDIT_RESPONSE_EMP_ID = Yii::app()->session['empid'];
         $errormessage             = '';
         // Save main details
@@ -402,10 +458,7 @@ class BulkAuditModel extends CFormModel
                 'EMP_ID' => $BL_AUDIT_RESPONSE_EMP_ID,
                 'action' => 'Insert'
             );
-             if($BL_AUDIT_RESPONSE_EMP_ID==86777){
-                echo "<pre>";print_r($content);
-             }
-            
+            echo "<pre>";print_r($content);die;
             if ($_SERVER['SERVER_NAME'] == 'dev-gladmin.intermesh.net' || $_SERVER['SERVER_NAME'] == 'stg-gladmin.intermesh.net') {
                 $url = 'http://stg-leads.imutils.com/wservce/glreport/blaudit/';
             } else {
@@ -609,8 +662,7 @@ class BulkAuditModel extends CFormModel
         }
         
        
-        
-
+      
         $p_res_id   = '';
         $cnt        = 0;
         $vendorName = $quesDetailsSql = '';
@@ -745,7 +797,7 @@ FROM   (WITH AUDIT_TBL
                 AND FK_ETO_OFR_ID IS NULL
                 ) OFR, 
         ETO_LEAP_MIS_INTERIM  ELM1, 
-        ETO_LEAP_MIS_INTERIM ELM2 
+        ETO_LEAP_MIS_INTERIM  ELM2 
 WHERE  OFR.ETO_OFR_APPROV_BY_ORIG = ELM1.ETO_LEAP_EMP_ID 
        AND ELM2.ETO_LEAP_EMP_ID = BL_AUDIT_RESPONSE_EMP_ID 
        AND QUESTION_TYPE IS NOT NULL $con1 $con_score_opt
@@ -776,7 +828,8 @@ ORDER  BY BL_AUDIT_RESPONSE_ID,
             array_push($dataArr, $rec_set);
         }
         }
-        
+
+
         $dataArr = array(
            
             array(
@@ -821,223 +874,12 @@ ORDER  BY BL_AUDIT_RESPONSE_ID,
                 'REMARKS' => 'Requirement is not clearly confirmed One more call required here.',
                 'BL_AUDIT_REBUTTAL_RES_ID' => '',
                 'OPT'=> 'Wrong Deletion'    
-            ),
-            array(
-
-                'ETO_LEAP_VENDOR_NAME' => 'VKALPINTENT',
-                'AUDITOR_NAME' => 'Aamir Khawujawali Sayyed-DDN',
-                'RES_DATE' => '08-APR-2022 05:56:19 AM',
-                'BL_AUDIT_RESPONSE_ID' => '2397097',
-                'FK_ETO_OFR_DISPLAY_ID' => '73963547259',
-                'ASSOC_NAME' => 'Pritesh Kumar Sharma',
-                'ETO_LEAP_EMP_ID' => '88213',
-                'FK_ETO_OFR_DEL_REASON_CODE' => 'Language Barrier(26)',
-                'REMARKS' => 'Comment(if any):',
-                'BL_AUDIT_REBUTTAL_RES_ID' => '',
-                'OPT'=> 'Can be Flagged'
-
-            ),
-            array(
-      
-                'ETO_LEAP_VENDOR_NAME' => 'COMPETENT',
-                'AUDITOR_NAME' => 'Aamir Khawujawali Sayyed-DDN',
-                'RES_DATE' => '08-APR-2022 06:56:19 AM',
-                'BL_AUDIT_RESPONSE_ID' => '2397169',
-                'FK_ETO_OFR_DISPLAY_ID' => '73962583895',
-                'ASSOC_NAME' => 'Pritesh Kumar Sharma',
-                'ETO_LEAP_EMP_ID' => '91684',
-                'FK_ETO_OFR_DEL_REASON_CODE' => '',
-                'REMARKS' => 'Comment(if any):',
-                'BL_AUDIT_REBUTTAL_RES_ID' => '',
-                'OPT'=> 'Can be Flagged'    
-            ),
-            array(
-      
-                'ETO_LEAP_VENDOR_NAME' => 'COMPETENT',
-                'AUDITOR_NAME' => 'Aamir Khawujawali Sayyed-DDN',
-                'RES_DATE' => '08-APR-2022 09:56:19 AM',
-                'BL_AUDIT_RESPONSE_ID' => '2397170',
-                'FK_ETO_OFR_DISPLAY_ID' => '73946263459',
-                'ASSOC_NAME' => 'Varinder Kaur',
-                'ETO_LEAP_EMP_ID' => '88663',
-                'FK_ETO_OFR_DEL_REASON_CODE' => 'Wrong Contact Details(10)',
-                'REMARKS' => 'Requirement is not clearly confirmed One more call required here.',
-                'BL_AUDIT_REBUTTAL_RES_ID' => '',
-                'OPT'=> 'Wrong Deletion'    
-            ),
-            array(
-
-                'ETO_LEAP_VENDOR_NAME' => 'VKALPINTENT',
-                'AUDITOR_NAME' => 'Aamir Khawujawali Sayyed-DDN',
-                'RES_DATE' => '08-APR-2022 05:56:19 AM',
-                'BL_AUDIT_RESPONSE_ID' => '2397097',
-                'FK_ETO_OFR_DISPLAY_ID' => '73963547259',
-                'ASSOC_NAME' => 'Pritesh Kumar Sharma',
-                'ETO_LEAP_EMP_ID' => '88213',
-                'FK_ETO_OFR_DEL_REASON_CODE' => 'Language Barrier(26)',
-                'REMARKS' => 'Comment(if any):',
-                'BL_AUDIT_REBUTTAL_RES_ID' => '',
-                'OPT'=> 'Can be Approved'
-
-            ),
-            array(
-      
-                'ETO_LEAP_VENDOR_NAME' => 'COMPETENT',
-                'AUDITOR_NAME' => 'Aamir Khawujawali Sayyed-DDN',
-                'RES_DATE' => '08-APR-2022 06:56:19 AM',
-                'BL_AUDIT_RESPONSE_ID' => '2397169',
-                'FK_ETO_OFR_DISPLAY_ID' => '73962583895',
-                'ASSOC_NAME' => 'Pritesh Kumar Sharma',
-                'ETO_LEAP_EMP_ID' => '91684',
-                'FK_ETO_OFR_DEL_REASON_CODE' => '',
-                'REMARKS' => 'Comment(if any):',
-                'BL_AUDIT_REBUTTAL_RES_ID' => '',
-                'OPT'=> 'Can be Approved'    
-            ),
-            array(
-      
-                'ETO_LEAP_VENDOR_NAME' => 'COMPETENT',
-                'AUDITOR_NAME' => 'Aamir Khawujawali Sayyed-DDN',
-                'RES_DATE' => '08-APR-2022 09:56:19 AM',
-                'BL_AUDIT_RESPONSE_ID' => '2397170',
-                'FK_ETO_OFR_DISPLAY_ID' => '73946263459',
-                'ASSOC_NAME' => 'Varinder Kaur',
-                'ETO_LEAP_EMP_ID' => '88663',
-                'FK_ETO_OFR_DEL_REASON_CODE' => 'Wrong Contact Details(10)',
-                'REMARKS' => 'Requirement is not clearly confirmed One more call required here.',
-                'BL_AUDIT_REBUTTAL_RES_ID' => '',
-                'OPT'=> 'Wrong Deletion'    
-            ),
-            array(
-
-                'ETO_LEAP_VENDOR_NAME' => 'VKALPINTENT',
-                'AUDITOR_NAME' => 'Aamir Khawujawali Sayyed-DDN',
-                'RES_DATE' => '08-APR-2022 05:56:19 AM',
-                'BL_AUDIT_RESPONSE_ID' => '2397097',
-                'FK_ETO_OFR_DISPLAY_ID' => '73963547259',
-                'ASSOC_NAME' => 'Pritesh Kumar Sharma',
-                'ETO_LEAP_EMP_ID' => '88213',
-                'FK_ETO_OFR_DEL_REASON_CODE' => 'Language Barrier(26)',
-                'REMARKS' => 'Comment(if any):',
-                'BL_AUDIT_REBUTTAL_RES_ID' => '',
-                'OPT'=> 'Can be Flagged'
-
-            ),
-            array(
-      
-                'ETO_LEAP_VENDOR_NAME' => 'COMPETENT',
-                'AUDITOR_NAME' => 'Aamir Khawujawali Sayyed-DDN',
-                'RES_DATE' => '08-APR-2022 06:56:19 AM',
-                'BL_AUDIT_RESPONSE_ID' => '2397169',
-                'FK_ETO_OFR_DISPLAY_ID' => '73962583895',
-                'ASSOC_NAME' => 'Pritesh Kumar Sharma',
-                'ETO_LEAP_EMP_ID' => '91684',
-                'FK_ETO_OFR_DEL_REASON_CODE' => '',
-                'REMARKS' => 'Comment(if any):',
-                'BL_AUDIT_REBUTTAL_RES_ID' => '',
-                'OPT'=> 'Can be Flagged'    
-            ),
-            array(
-      
-                'ETO_LEAP_VENDOR_NAME' => 'COMPETENT',
-                'AUDITOR_NAME' => 'Aamir Khawujawali Sayyed-DDN',
-                'RES_DATE' => '08-APR-2022 09:56:19 AM',
-                'BL_AUDIT_RESPONSE_ID' => '2397170',
-                'FK_ETO_OFR_DISPLAY_ID' => '73946263459',
-                'ASSOC_NAME' => 'Varinder Kaur',
-                'ETO_LEAP_EMP_ID' => '88663',
-                'FK_ETO_OFR_DEL_REASON_CODE' => 'Wrong Contact Details(10)',
-                'REMARKS' => 'Requirement is not clearly confirmed One more call required here.',
-                'BL_AUDIT_REBUTTAL_RES_ID' => '',
-                'OPT'=> 'Wrong Deletion'    
-            ),
-            array(
-
-                'ETO_LEAP_VENDOR_NAME' => 'VKALPINTENT',
-                'AUDITOR_NAME' => 'Aamir Khawujawali Sayyed-DDN',
-                'RES_DATE' => '08-APR-2022 05:56:19 AM',
-                'BL_AUDIT_RESPONSE_ID' => '2397097',
-                'FK_ETO_OFR_DISPLAY_ID' => '73963547259',
-                'ASSOC_NAME' => 'Pritesh Kumar Sharma',
-                'ETO_LEAP_EMP_ID' => '88213',
-                'FK_ETO_OFR_DEL_REASON_CODE' => 'Language Barrier(26)',
-                'REMARKS' => 'Comment(if any):',
-                'BL_AUDIT_REBUTTAL_RES_ID' => '',
-                'OPT'=> 'Wrong Deletion Disposition Selection'
-
-            ),
-            array(
-      
-                'ETO_LEAP_VENDOR_NAME' => 'COMPETENT',
-                'AUDITOR_NAME' => 'Aamir Khawujawali Sayyed-DDN',
-                'RES_DATE' => '08-APR-2022 06:56:19 AM',
-                'BL_AUDIT_RESPONSE_ID' => '2397169',
-                'FK_ETO_OFR_DISPLAY_ID' => '73962583895',
-                'ASSOC_NAME' => 'Pritesh Kumar Sharma',
-                'ETO_LEAP_EMP_ID' => '91684',
-                'FK_ETO_OFR_DEL_REASON_CODE' => '',
-                'REMARKS' => 'Comment(if any):',
-                'BL_AUDIT_REBUTTAL_RES_ID' => '',
-                'OPT'=> 'Can be Approved'    
-            ),
-            array(
-      
-                'ETO_LEAP_VENDOR_NAME' => 'COMPETENT',
-                'AUDITOR_NAME' => 'Aamir Khawujawali Sayyed-DDN',
-                'RES_DATE' => '08-APR-2022 09:56:19 AM',
-                'BL_AUDIT_RESPONSE_ID' => '2397170',
-                'FK_ETO_OFR_DISPLAY_ID' => '73946263459',
-                'ASSOC_NAME' => 'Varinder Kaur',
-                'ETO_LEAP_EMP_ID' => '88663',
-                'FK_ETO_OFR_DEL_REASON_CODE' => 'Wrong Contact Details(10)',
-                'REMARKS' => 'Requirement is not clearly confirmed One more call required here.',
-                'BL_AUDIT_REBUTTAL_RES_ID' => '',
-                'OPT'=> 'Wrong Deletion Disposition Selection'    
-            ),
-            array(
-      
-                'ETO_LEAP_VENDOR_NAME' => 'SKKDJD',
-                'AUDITOR_NAME' => 'Aamir Kddddhawujawali Sayyed-DDN',
-                'RES_DATE' => '08-APR-2022 09:56:19 AM',
-                'BL_AUDIT_RESPONSE_ID' => '23927170',
-                'FK_ETO_OFR_DISPLAY_ID' => '73976263459',
-                'ASSOC_NAME' => 'Varinderrrr Kaur',
-                'ETO_LEAP_EMP_ID' => '88683',
-                'FK_ETO_OFR_DEL_REASON_CODE' => 'Wrong Contact',
-                'REMARKS' => 'Requirement is not clearly confirmed One more call required here.',
-                'BL_AUDIT_REBUTTAL_RES_ID' => '',
-                'OPT'=> 'Wrong Deletion Disposition Selection'   
-            ),
-            array(
-      
-                'ETO_LEAP_VENDOR_NAME' => 'SKKDJD',
-                'AUDITOR_NAME' => 'Aamir Kddddhawujawali Sayyed-DDN',
-                'RES_DATE' => '08-APR-2022 09:56:19 AM',
-                'BL_AUDIT_RESPONSE_ID' => '23927170',
-                'FK_ETO_OFR_DISPLAY_ID' => '73976263459',
-                'ASSOC_NAME' => 'Varinderrrr Kaur',
-                'ETO_LEAP_EMP_ID' => '88683',
-                'FK_ETO_OFR_DEL_REASON_CODE' => 'Wrong Contact',
-                'REMARKS' => 'Requirement is not clearly confirmed One more call required here.',
-                'BL_AUDIT_REBUTTAL_RES_ID' => '',
-                'OPT'=> 'Can be Approved'   
-            ),
-            array(
-      
-                'ETO_LEAP_VENDOR_NAME' => 'SKassfsKDJD',
-                'AUDITOR_NAME' => 'Aamir Kddddcscsdhawujawali Sayyed-DDN',
-                'RES_DATE' => '08-APR-2022 09:56:19 AM',
-                'BL_AUDIT_RESPONSE_ID' => '23917170',
-                'FK_ETO_OFR_DISPLAY_ID' => '73346263459',
-                'ASSOC_NAME' => 'Varinderrrr Kaur',
-                'ETO_LEAP_EMP_ID' => '82683',
-                'FK_ETO_OFR_DEL_REASON_CODE' => 'Wrong Contact',
-                'REMARKS' => 'Requirement is not clearly confirmed One more call required here.',
-                'BL_AUDIT_REBUTTAL_RES_ID' => '',
-                'OPT'=> 'Pass'    
             )
 
         );
+
+
+
 
 
         $cnt = 0;
@@ -1065,7 +907,7 @@ ORDER  BY BL_AUDIT_RESPONSE_ID,
                 if ($p_res_id != $sampleValue['BL_AUDIT_RESPONSE_ID']) {
                     $k = 0;
                     $cnt++;
-
+                   
                     $d1[$cnt][$k++] = $sampleValue['ETO_LEAP_VENDOR_NAME'];
                     $d1[$cnt][$k++] = $sampleValue['AUDITOR_NAME'];
                     $d1[$cnt][$k++] = $sampleValue['RES_DATE'];
@@ -1125,7 +967,7 @@ ORDER  BY BL_AUDIT_RESPONSE_ID,
             $i=0;
             foreach($d_final as $temp)
             {
-                $tempfile=$temp[0]."##".$temp[1]."##".$temp[2]."##".$temp[3]."##".$temp[4]."##".$temp[5]."##".$temp[6]."##".$temp[7]."##".$temp[8]."##".$temp[9]."##".$temp[10]."##".$temp[11]."##".$temp[12]."##".$temp[17]."##".$temp[13]."##".$temp[14];
+                $tempfile=$temp[0]."##".$temp[1]."##".$temp[2]."##".$temp[3]."##".$temp[4]."##".$temp[5]."##".$temp[6]."##".$temp[7]."##".$temp[8]."##".$temp[9]."##".$temp[10]."##".$temp[11]."##".$temp[12]."##".$temp[13];
                 $tempfile2=preg_replace('/,/', "", $tempfile);
                 $d1_file=preg_replace('/##/', ",", $tempfile2);
                 $d2_file=preg_replace('/[^A-Za-z0-9\-,+\(\):]/', ' ', $d1_file);
@@ -1148,6 +990,7 @@ ORDER  BY BL_AUDIT_RESPONSE_ID,
         echo $data;		
         exit();
 }
+ 
         
     public function auditdetailbyID($auditId)
     {
@@ -1157,7 +1000,7 @@ ORDER  BY BL_AUDIT_RESPONSE_ID,
         $obj          = new Globalconnection();  
         $con = $qtype = '';    
         if (isset($_SERVER['SERVER_NAME']) && ($_SERVER['SERVER_NAME'] == 'dev-gladmin.intermesh.net') || ($_SERVER['SERVER_NAME'] == 'stg-gladmin.intermesh.net')) {
-            $dbh = $obj->connect_db_yii('postgress_web77v');
+            $dbh = $obj->connect_db_yii('postgress_web68v');
         } else {
             $dbh = $obj->connect_db_yii('postgress_web68v');
         }
@@ -1342,4 +1185,3 @@ ORDER  BY BL_AUDIT_RESPONSE_ID,
             return $firstpg_ofrlist;
   }
 }
- 

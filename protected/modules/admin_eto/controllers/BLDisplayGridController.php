@@ -12,11 +12,11 @@ class BLDisplayGridController extends Controller
         }else
         {
             $mid =isset($_REQUEST["mid"]) ? $_REQUEST["mid"] : '';
-                $user_permissions=GL_LoginValidation::CheckModulePermission($mid, $empid);
+            $user_permissions=GL_LoginValidation::CheckModulePermission($mid, $empid);
 		if(empty($user_permissions))
 		{
-		$user_permissions['TOVIEW'] = $user_permissions['TOEDIT']=$user_permissions['TOADD'] =$user_permissions['TODELETE']='';
-		 }
+		    $user_permissions['TOVIEW'] = $user_permissions['TOEDIT']=$user_permissions['TOADD'] =$user_permissions['TODELETE']='';
+		}
          		
 	    $user_view = isset($user_permissions['TOVIEW']) ? $user_permissions['TOVIEW'] : '';
             $user_download    =isset($user_permissions['TODOWNLOAD']) ? $user_permissions['TODOWNLOAD'] : '';
@@ -26,7 +26,6 @@ class BLDisplayGridController extends Controller
             $mid =isset($_REQUEST["mid"]) ? $_REQUEST["mid"] : '';
                 $model = new BLDisplayGridForm();
                 $process_time =  date("F j, Y, g:i a");
-
                 $domain_serv = isset($_SERVER['UTILS_URL']) && $_SERVER['UTILS_URL'] !='' ? $_SERVER['UTILS_URL'] : ''; 
                 $pass_file         = isset($_REQUEST['excel']) ? $_REQUEST['excel'] : '';                
                 $pass_file_name    = isset($_REQUEST['excel_name']) ? $_REQUEST['excel_name'] : '';
