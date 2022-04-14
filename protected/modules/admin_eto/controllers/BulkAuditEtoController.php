@@ -146,6 +146,7 @@ class BulkAuditEtoController extends Controller
                 $dataArr=array(); 
                 
                 $obj =new BulkAuditModel;	
+
                 $leapdashboardModel =  new LeapDashboardModel();
                 $vendorRe = $leapdashboardModel->getLeapVendor($request,$empId);
                 $vendor_approve = !empty($request->getParam("vendor_approve")) ? $request->getParam("vendor_approve") : 'ALL'; // deleted by
@@ -155,6 +156,7 @@ class BulkAuditEtoController extends Controller
                 $auditId=isset($_REQUEST['audit_id']) ? $_REQUEST['audit_id'] : '';
                 $permision = $vendorRe['permision'];
                 $vendorArr = $vendorRe['vendorArr'];
+                
                 $deleted_by = $request->getParam("vendor_approve",'');
                 $AssociateId='';
                 $first = new DateTime($start_date1);
